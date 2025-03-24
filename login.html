@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login / Sign Up</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+<body>
+    <div class="form-container">
+        <h2>User Sign Up / Login</h2>
+        <form id="signupForm">
+            <h3>Sign Up</h3>
+            <input type="text" id="signupUsername" placeholder="Enter Username" required>
+            <input type="password" id="signupPassword" placeholder="Enter Password" required>
+            <button type="button" onclick="signUp()">Sign Up</button>
+        </form>
+
+        <form id="loginForm">
+            <h3>Login</h3>
+            <input type="text" id="loginUsername" placeholder="Enter Username" required>
+            <input type="password" id="loginPassword" placeholder="Enter Password" required>
+            <button type="button" onclick="login()">Login</button>
+        </form>
+
+        <div id="error" class="error-msg"></div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
