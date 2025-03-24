@@ -31,7 +31,7 @@ function login() {
     // Save logged-in user info
     localStorage.setItem('loggedInUser', JSON.stringify(user));
     alert('Login successful!');
-    window.location.href = 'spinwheel.html';
+    window.location.href = 'game.html';
 }
 
 function loadUsers() {
