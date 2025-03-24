@@ -168,19 +168,19 @@
   </div>
 
   <script>
-    // Fetch logged-in user without password
+    // ✅ Fetch user info without password
     const loggedInUser = localStorage.getItem('loggedInUser') || 'Guest';
     const userDataKey = `user_${loggedInUser}`;
 
-    // Check if user data exists or initialize with zero points
+    // ✅ Ensure no password is ever stored
+    localStorage.removeItem('password');
+
+    // ✅ Check if user data exists or initialize
     let userData = JSON.parse(localStorage.getItem(userDataKey)) || { points: 0 };
 
-    // Show username and points correctly
+    // ✅ Display username and points correctly
     document.getElementById('username').textContent = `Username: ${loggedInUser}`;
     document.getElementById('points').textContent = `Points: ${userData.points || 0}`;
-
-    // Remove any stored passwords (for safety)
-    localStorage.removeItem('password');
 
     const wheel = document.getElementById('wheel');
     const spinButton = document.getElementById('spinButton');
@@ -192,12 +192,12 @@
     let spinning = false;
     let rewardPoints = 0;
 
-    // Spin Button Click Action
+    // ✅ Spin Button Click Action
     spinButton.addEventListener('click', function () {
       if (spinning) return;
       spinning = true;
 
-      // Random rotation (up to 360 degrees)
+      // ✅ Random rotation up to 3600 degrees
       const randomRotation = Math.floor(Math.random() * 3600) + 720;
       wheel.style.transform = `rotate(${randomRotation}deg)`;
 
@@ -205,28 +205,28 @@
         spinning = false;
         const finalRotation = randomRotation % 360;
         const segmentIndex = Math.floor(finalRotation / 45);
-        rewardPoints = segmentIndex + 1; // Reward as per segment number
+        rewardPoints = segmentIndex + 1;
 
-        // Show reward popup
+        // ✅ Show reward popup
         rewardMessage.textContent = `You won ${rewardPoints} points! Watch ad to collect.`;
         rewardPopup.style.display = 'flex';
       }, 3000);
     });
 
-    // Watch Ad to Collect Reward
+    // ✅ Watch Ad to Collect Points
     watchAdButton.addEventListener('click', function () {
       setTimeout(function () {
         userData.points += rewardPoints;
         document.getElementById('points').textContent = `Points: ${userData.points}`;
 
-        // Save updated points in local storage
+        // ✅ Save updated points
         localStorage.setItem(userDataKey, JSON.stringify(userData));
         rewardPopup.style.display = 'none';
         alert('✅ Points added after watching ad!');
-      }, 2000); // Simulated ad delay
+      }, 2000);
     });
 
-    // Withdraw Points Logic
+    // ✅ Withdraw Points
     withdrawButton.addEventListener('click', function () {
       if (userData.points >= 15000) {
         alert(`✅ Withdrawal successful! You withdrew ${userData.points} points.`);
@@ -239,7 +239,7 @@
       }
     });
 
-    // Double-check password cleanup
+    // ✅ Extra security: Remove any stored passwords
     localStorage.removeItem('password');
   </script>
 
