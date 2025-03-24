@@ -2,11 +2,54 @@
 <html>
 <head>
     <title>Login / Sign Up</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            background-color: #222;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            width: 320px;
+            text-align: center;
+        }
+        h2, h3 {
+            margin-top: 0;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            background-color: #D4AF37;
+            color: #000;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #b7952c;
+        }
+        .error-msg {
+            color: #ff4d4d;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <div class="form-container">
         <h2>User Sign Up / Login</h2>
+
+        <!-- Sign Up Form -->
         <form id="signupForm">
             <h3>Sign Up</h3>
             <input type="text" id="signupUsername" placeholder="Enter Username" required>
@@ -14,6 +57,7 @@
             <button type="button" onclick="signUp()">Sign Up</button>
         </form>
 
+        <!-- Login Form -->
         <form id="loginForm">
             <h3>Login</h3>
             <input type="text" id="loginUsername" placeholder="Enter Username" required>
@@ -24,6 +68,60 @@
         <div id="error" class="error-msg"></div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // Get stored user data from localStorage
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+
+        // Sign Up Logic
+        function signUp() {
+            const username = document.getElementById('signupUsername').value.trim();
+            const password = document.getElementById('signupPassword').value.trim();
+
+            if (username === "" || password === "") {
+                showError("Please enter a valid username and password.");
+                return;
+            }
+
+            // Check if user already exists
+            const existingUser = users.find(user => user.username === username);
+            if (existingUser) {
+                showError("Username already exists. Try another one.");
+                return;
+            }
+
+            // Add new user
+            const newUser = {
+                username: username,
+                password: password,
+                points: 0
+            };
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            alert("Sign Up Successful! You can now log in.");
+        }
+
+        // Login Logic
+        function login() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+
+            const user = users.find(user => user.username === username && user.password === password);
+            
+            if (!user) {
+                showError("Invalid username or password.");
+                return;
+            }
+
+            // Store logged-in user in session
+            localStorage.setItem('loggedInUser', JSON.stringify(user));
+            alert("Login Successful! Redirecting...");
+            window.location.href = "game.html"; // Redirect to game page
+        }
+
+        // Error message display
+        function showError(message) {
+            document.getElementById('error').textContent = message;
+        }
+    </script>
 </body>
 </html>
