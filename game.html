@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
       padding: 0;
       box-sizing: border-box;
     }
+
     body {
       font-family: Arial, sans-serif;
       background: linear-gradient(to bottom, #0f0f0f, #1c1c1c);
@@ -20,6 +22,7 @@
       justify-content: center;
       align-items: center;
     }
+
     #header {
       width: 100%;
       padding: 15px 20px;
@@ -32,10 +35,12 @@
       left: 0;
       z-index: 1000;
     }
+
     #header span {
       font-size: 18px;
       font-weight: bold;
     }
+
     #game-container {
       margin-top: 80px;
       width: 100%;
@@ -44,6 +49,7 @@
       flex-direction: column;
       align-items: center;
     }
+
     .wheel-container {
       position: relative;
       width: 300px;
@@ -53,13 +59,15 @@
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
       overflow: hidden;
     }
+
     .wheel {
       width: 100%;
       height: 100%;
       border-radius: 50%;
       transform: rotate(0deg);
-      transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);
+      transition: transform 3s ease-out;
     }
+
     .segment {
       position: absolute;
       width: 50%;
@@ -67,9 +75,8 @@
       left: 50%;
       top: 50%;
       transform-origin: 0% 0%;
-      background-color: #FFD700;
-      border: 1px solid #fff;
     }
+
     .segment div {
       position: absolute;
       width: 100%;
@@ -80,26 +87,51 @@
       font-size: 14px;
       font-weight: bold;
       color: #000;
-      transform: rotate(-18deg);
+      transform: rotate(-36deg);
     }
+
     .segment:nth-child(odd) {
       background-color: #FFD700;
     }
+
     .segment:nth-child(even) {
       background-color: #C0C0C0;
     }
-    .segment:nth-child(1) { transform: rotate(0deg) skewY(-54deg); }
-    .segment:nth-child(2) { transform: rotate(36deg) skewY(-54deg); }
-    .segment:nth-child(3) { transform: rotate(72deg) skewY(-54deg); }
-    .segment:nth-child(4) { transform: rotate(108deg) skewY(-54deg); }
-    .segment:nth-child(5) { transform: rotate(144deg) skewY(-54deg); }
-    .segment:nth-child(6) { transform: rotate(180deg) skewY(-54deg); }
-    .segment:nth-child(7) { transform: rotate(216deg) skewY(-54deg); }
-    .segment:nth-child(8) { transform: rotate(252deg) skewY(-54deg); }
-    .segment:nth-child(9) { transform: rotate(288deg) skewY(-54deg); }
-    .segment:nth-child(10) { transform: rotate(324deg) skewY(-54deg); }
-    
-    #spinButton, #withdrawButton {
+
+    .segment:nth-child(1) {
+      transform: rotate(0deg) skewY(-54deg);
+    }
+
+    .segment:nth-child(2) {
+      transform: rotate(45deg) skewY(-54deg);
+    }
+
+    .segment:nth-child(3) {
+      transform: rotate(90deg) skewY(-54deg);
+    }
+
+    .segment:nth-child(4) {
+      transform: rotate(135deg) skewY(-54deg);
+    }
+
+    .segment:nth-child(5) {
+      transform: rotate(180deg) skewY(-54deg);
+    }
+
+    .segment:nth-child(6) {
+      transform: rotate(225deg) skewY(-54deg);
+    }
+
+    .segment:nth-child(7) {
+      transform: rotate(270deg) skewY(-54deg);
+    }
+
+    .segment:nth-child(8) {
+      transform: rotate(315deg) skewY(-54deg);
+    }
+
+    #spinButton,
+    #withdrawButton {
       width: 90%;
       max-width: 300px;
       padding: 12px;
@@ -112,9 +144,12 @@
       font-weight: bold;
       cursor: pointer;
     }
-    #spinButton:hover, #withdrawButton:hover {
+
+    #spinButton:hover,
+    #withdrawButton:hover {
       background-color: #e6c200;
     }
+
     .popup {
       position: fixed;
       top: 0;
@@ -126,6 +161,7 @@
       justify-content: center;
       align-items: center;
     }
+
     .popup-content {
       background-color: #222;
       padding: 20px;
@@ -133,6 +169,7 @@
       text-align: center;
       width: 300px;
     }
+
     .popup-content button {
       padding: 8px 16px;
       font-size: 16px;
@@ -142,11 +179,13 @@
       border-radius: 5px;
       cursor: pointer;
     }
+
     .popup-content button:hover {
       background-color: #e6c200;
     }
   </style>
 </head>
+
 <body>
 
   <!-- Header: Shows logged-in username and current points -->
@@ -159,16 +198,14 @@
   <div id="game-container">
     <div class="wheel-container">
       <div class="wheel" id="wheel">
-        <div class="segment"><div>100</div></div>
-        <div class="segment"><div>200</div></div>
-        <div class="segment"><div>300</div></div>
-        <div class="segment"><div>400</div></div>
-        <div class="segment"><div>500</div></div>
-        <div class="segment"><div>600</div></div>
-        <div class="segment"><div>700</div></div>
-        <div class="segment"><div>800</div></div>
-        <div class="segment"><div>900</div></div>
-        <div class="segment"><div>1000</div></div>
+        <div class="segment"><div>1</div></div>
+        <div class="segment"><div>2</div></div>
+        <div class="segment"><div>1</div></div>
+        <div class="segment"><div>2</div></div>
+        <div class="segment"><div>1</div></div>
+        <div class="segment"><div>2</div></div>
+        <div class="segment"><div>1</div></div>
+        <div class="segment"><div>2</div></div>
       </div>
     </div>
 
@@ -224,13 +261,13 @@
       setTimeout(function () {
         spinning = false;
         const finalRotation = totalRotation % 360;
-        const segmentIndex = Math.floor(finalRotation / 36);
-        rewardPoints = (segmentIndex + 1) * 100;
+        const segmentIndex = Math.floor(finalRotation / 45);
+        rewardPoints = segmentIndex % 2 === 0 ? 1 : 2;
 
         // Show reward popup for ad
         rewardMessage.textContent = `You won ${rewardPoints} points! Watch ad to collect.`;
         rewardPopup.style.display = 'flex';
-      }, 4000);
+      }, 3000);
     });
 
     // Watch Ad to Collect Reward
@@ -262,4 +299,5 @@
   </script>
 
 </body>
+
 </html>
