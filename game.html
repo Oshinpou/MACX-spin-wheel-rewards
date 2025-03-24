@@ -5,7 +5,7 @@
   <title>MACX Spin Wheel Crypto Earn</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: Arial, sans-serif; background-color: #111; color: #fff; }
+    body { font-family: Arial, sans-serif; background-color: #111; color: #fff; height: 100vh; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; }
 
     /* Header Bar */
     #header {
@@ -20,21 +20,22 @@
 
     /* Game Container */
     #game-container {
+      margin-top: 30px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px;
     }
 
     /* Wheel Container */
     .wheel-container {
       position: relative;
-      width: 300px;
-      height: 300px;
+      width: 320px;
+      height: 320px;
+      margin-top: 30px;
       border: 5px solid #fff;
       border-radius: 50%;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
       perspective: 1000px;
-      margin-bottom: 20px;
     }
     .wheel {
       width: 100%;
@@ -63,12 +64,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 14px;
+      font-size: 18px;
       font-weight: bold;
+      transform: rotate(-18deg);
     }
 
-    .segment:nth-child(odd) div { background-color: #D4AF37; } /* Golden */
-    .segment:nth-child(even) div { background-color: #A9A9A9; } /* Grey */
+    .segment:nth-child(odd) div { background-color: #D4AF37; color: #000; }
+    .segment:nth-child(even) div { background-color: #A9A9A9; color: #000; }
 
     .segment:nth-child(1) { transform: rotate(0deg) skewY(-54deg); }
     .segment:nth-child(2) { transform: rotate(36deg) skewY(-54deg); }
@@ -90,7 +92,7 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      margin-top: 10px;
+      margin-top: 20px;
     }
     #spinButton:hover, #withdrawButton:hover { background-color: #b7952c; }
 
@@ -180,7 +182,7 @@
     const rewardMessage = document.getElementById('rewardMessage');
     const watchAdButton = document.getElementById('watchAdButton');
 
-    let spinning = false;  // Prevent multiple spins
+    let spinning = false;
 
     spinButton.addEventListener('click', function () {
       if (spinning) return;
