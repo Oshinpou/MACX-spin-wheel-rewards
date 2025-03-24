@@ -87,47 +87,46 @@
       font-size: 14px;
       font-weight: bold;
       color: #000;
-      transform: rotate(-36deg);
-    }
-
-    .segment:nth-child(odd) {
-      background-color: #FFD700;
-    }
-
-    .segment:nth-child(even) {
-      background-color: #C0C0C0;
     }
 
     .segment:nth-child(1) {
-      transform: rotate(0deg) skewY(-54deg);
+      background-color: #FFD700;
+      transform: rotate(0deg) skewY(-30deg);
     }
 
     .segment:nth-child(2) {
-      transform: rotate(45deg) skewY(-54deg);
+      background-color: #C0C0C0;
+      transform: rotate(45deg) skewY(-30deg);
     }
 
     .segment:nth-child(3) {
-      transform: rotate(90deg) skewY(-54deg);
+      background-color: #FFD700;
+      transform: rotate(90deg) skewY(-30deg);
     }
 
     .segment:nth-child(4) {
-      transform: rotate(135deg) skewY(-54deg);
+      background-color: #C0C0C0;
+      transform: rotate(135deg) skewY(-30deg);
     }
 
     .segment:nth-child(5) {
-      transform: rotate(180deg) skewY(-54deg);
+      background-color: #FFD700;
+      transform: rotate(180deg) skewY(-30deg);
     }
 
     .segment:nth-child(6) {
-      transform: rotate(225deg) skewY(-54deg);
+      background-color: #C0C0C0;
+      transform: rotate(225deg) skewY(-30deg);
     }
 
     .segment:nth-child(7) {
-      transform: rotate(270deg) skewY(-54deg);
+      background-color: #FFD700;
+      transform: rotate(270deg) skewY(-30deg);
     }
 
     .segment:nth-child(8) {
-      transform: rotate(315deg) skewY(-54deg);
+      background-color: #C0C0C0;
+      transform: rotate(315deg) skewY(-30deg);
     }
 
     #spinButton,
@@ -188,7 +187,7 @@
 
 <body>
 
-  <!-- Header: Shows logged-in username and current points -->
+  <!-- Header: Shows logged-in username and collected points -->
   <div id="header">
     <span id="username">Username: Guest</span>
     <span id="points">Points: 0</span>
@@ -245,7 +244,7 @@
       if (spinning) return;
       spinning = true;
 
-      // Random rotation
+      // Random rotation with clean segments
       const randomRotation = Math.floor(Math.random() * 3600) + 720;
       let currentRotation = 0;
       const currentTransform = wheel.style.transform;
