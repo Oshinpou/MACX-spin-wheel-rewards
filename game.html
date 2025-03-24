@@ -67,14 +67,13 @@
       left: 50%;
       top: 50%;
       transform-origin: 0% 0%;
+      background-color: #FFD700;
+      border: 1px solid #fff;
     }
     .segment div {
       position: absolute;
-      width: 200%;
-      height: 200%;
-      border: 1px solid #fff;
-      border-radius: 50%;
-      clip-path: polygon(50% 50%, 100% 0, 100% 100%);
+      width: 100%;
+      height: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -83,10 +82,10 @@
       color: #000;
       transform: rotate(-18deg);
     }
-    .segment:nth-child(odd) div {
+    .segment:nth-child(odd) {
       background-color: #FFD700;
     }
-    .segment:nth-child(even) div {
+    .segment:nth-child(even) {
       background-color: #C0C0C0;
     }
     .segment:nth-child(1) { transform: rotate(0deg) skewY(-54deg); }
@@ -160,16 +159,16 @@
   <div id="game-container">
     <div class="wheel-container">
       <div class="wheel" id="wheel">
-        <div class="segment"><div>2</div></div>
-        <div class="segment"><div>1</div></div>
-        <div class="segment"><div>2</div></div>
-        <div class="segment"><div>1</div></div>
-        <div class="segment"><div>2</div></div>
-        <div class="segment"><div>1</div></div>
-        <div class="segment"><div>2</div></div>
-        <div class="segment"><div>1</div></div>
-        <div class="segment"><div>2</div></div>
-        <div class="segment"><div>1</div></div>
+        <div class="segment"><div>100</div></div>
+        <div class="segment"><div>200</div></div>
+        <div class="segment"><div>300</div></div>
+        <div class="segment"><div>400</div></div>
+        <div class="segment"><div>500</div></div>
+        <div class="segment"><div>600</div></div>
+        <div class="segment"><div>700</div></div>
+        <div class="segment"><div>800</div></div>
+        <div class="segment"><div>900</div></div>
+        <div class="segment"><div>1000</div></div>
       </div>
     </div>
 
@@ -210,7 +209,7 @@
       spinning = true;
 
       // Random rotation
-      const randomRotation = Math.floor(Math.random() * 500) + 500;
+      const randomRotation = Math.floor(Math.random() * 3600) + 720;
       let currentRotation = 0;
       const currentTransform = wheel.style.transform;
       if (currentTransform) {
@@ -226,10 +225,10 @@
         spinning = false;
         const finalRotation = totalRotation % 360;
         const segmentIndex = Math.floor(finalRotation / 36);
-        rewardPoints = (segmentIndex % 2 === 0) ? 2 : 1;
+        rewardPoints = (segmentIndex + 1) * 100;
 
         // Show reward popup for ad
-        rewardMessage.textContent = `You won ${rewardPoints} point${rewardPoints > 1 ? 's' : ''}!`;
+        rewardMessage.textContent = `You won ${rewardPoints} points! Watch ad to collect.`;
         rewardPopup.style.display = 'flex';
       }, 4000);
     });
@@ -250,14 +249,14 @@
 
     // Withdraw Points Logic
     withdrawButton.addEventListener('click', function () {
-      if (user.points >= 10) {
+      if (user.points >= 15000) {
         alert(`✅ Withdrawal successful! You withdrew ${user.points} points.`);
         user.points = 0;
         localStorage.setItem(`user_${loggedInUser}`, JSON.stringify(user));
         document.getElementById('points').textContent = `Points: 0`;
         window.location.href = 'withdraw.html';
       } else {
-        alert("⚠️ You need at least 10 points to withdraw.");
+        alert("⚠️ Minimum 15,000 points required to withdraw.");
       }
     });
   </script>
