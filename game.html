@@ -167,13 +167,15 @@
   </div>
 
   <script>
-    // Fetch logged-in username and points from local CRM
+    // Get logged-in username from local storage
     const loggedInUser = localStorage.getItem('loggedInUser') || 'Guest';
-    let user = JSON.parse(localStorage.getItem(`user_${loggedInUser}`)) || { points: 0 };
 
-    // Update header
+    // Get points data or initialize if not present
+    let userData = JSON.parse(localStorage.getItem(`user_${loggedInUser}`)) || { points: 0 };
+
+    // Update header with username and points
     document.getElementById('username').textContent = `Username: ${loggedInUser}`;
-    document.getElementById('points').textContent = `Points: ${user.points}`;
+    document.getElementById('points').textContent = `Points: ${userData.points}`;
 
     const wheel = document.getElementById('wheel');
     const spinButton = document.getElementById('spinButton');
@@ -209,11 +211,11 @@
     // Watch Ad to Collect Reward
     watchAdButton.addEventListener('click', function () {
       setTimeout(function () {
-        user.points += rewardPoints;
-        document.getElementById('points').textContent = `Points: ${user.points}`;
+        userData.points += rewardPoints;
+        document.getElementById('points').textContent = `Points: ${userData.points}`;
 
         // Save updated points
-        localStorage.setItem(`user_${loggedInUser}`, JSON.stringify(user));
+        localStorage.setItem(`user_${loggedInUser}`, JSON.stringify(userData));
         rewardPopup.style.display = 'none';
         alert('✅ Points added after watching ad!');
       }, 2000); // Simulate ad delay
@@ -221,16 +223,19 @@
 
     // Withdraw Points Logic
     withdrawButton.addEventListener('click', function () {
-      if (user.points >= 15000) {
-        alert(`✅ Withdrawal successful! You withdrew ${user.points} points.`);
-        user.points = 0;
-        localStorage.setItem(`user_${loggedInUser}`, JSON.stringify(user));
+      if (userData.points >= 15000) {
+        alert(`✅ Withdrawal successful! You withdrew ${userData.points} points.`);
+        userData.points = 0;
+        localStorage.setItem(`user_${loggedInUser}`, JSON.stringify(userData));
         document.getElementById('points').textContent = `Points: 0`;
         window.location.href = 'withdraw.html';
       } else {
         alert("⚠️ Minimum 15,000 points required to withdraw.");
       }
     });
+
+    // Clear password on login
+    localStorage.removeItem('password');
   </script>
 
 </body>
