@@ -168,17 +168,17 @@
   </div>
 
   <script>
-    // ✅ Fetch user info without password
+    // ✅ Remove password if stored accidentally
+    localStorage.removeItem('password');
+
+    // ✅ Fetch logged-in user (default to 'Guest')
     const loggedInUser = localStorage.getItem('loggedInUser') || 'Guest';
     const userDataKey = `user_${loggedInUser}`;
 
-    // ✅ Ensure no password is ever stored
-    localStorage.removeItem('password');
-
-    // ✅ Check if user data exists or initialize
+    // ✅ Initialize or fetch points for the logged-in user
     let userData = JSON.parse(localStorage.getItem(userDataKey)) || { points: 0 };
 
-    // ✅ Display username and points correctly
+    // ✅ Display only username and points (no password!)
     document.getElementById('username').textContent = `Username: ${loggedInUser}`;
     document.getElementById('points').textContent = `Points: ${userData.points || 0}`;
 
@@ -192,12 +192,12 @@
     let spinning = false;
     let rewardPoints = 0;
 
-    // ✅ Spin Button Click Action
+    // ✅ Spin Button Action
     spinButton.addEventListener('click', function () {
       if (spinning) return;
       spinning = true;
 
-      // ✅ Random rotation up to 3600 degrees
+      // ✅ Random rotation logic
       const randomRotation = Math.floor(Math.random() * 3600) + 720;
       wheel.style.transform = `rotate(${randomRotation}deg)`;
 
@@ -219,14 +219,14 @@
         userData.points += rewardPoints;
         document.getElementById('points').textContent = `Points: ${userData.points}`;
 
-        // ✅ Save updated points
+        // ✅ Save points correctly
         localStorage.setItem(userDataKey, JSON.stringify(userData));
         rewardPopup.style.display = 'none';
         alert('✅ Points added after watching ad!');
       }, 2000);
     });
 
-    // ✅ Withdraw Points
+    // ✅ Withdraw Points Logic
     withdrawButton.addEventListener('click', function () {
       if (userData.points >= 15000) {
         alert(`✅ Withdrawal successful! You withdrew ${userData.points} points.`);
@@ -239,7 +239,7 @@
       }
     });
 
-    // ✅ Extra security: Remove any stored passwords
+    // ✅ Final cleanup to prevent password leakage
     localStorage.removeItem('password');
   </script>
 
