@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MACX Spin Wheel - Crypto Earn</title>
+  <title>MACX Spin Wheel</title>
   <style>
     * {
       margin: 0;
@@ -14,13 +14,13 @@
 
     body {
       font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom, #0f0f0f, #1c1c1c);
+      background-color: #121212;
       color: #fff;
-      height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      height: 100vh;
     }
 
     #header {
@@ -29,7 +29,6 @@
       background-color: #222;
       display: flex;
       justify-content: space-between;
-      align-items: center;
       position: fixed;
       top: 0;
       left: 0;
@@ -56,15 +55,15 @@
       height: 300px;
       border: 5px solid #fff;
       border-radius: 50%;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
       overflow: hidden;
+      margin-top: 20px;
     }
 
     .wheel {
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      transform: rotate(0deg);
+      position: relative;
       transition: transform 3s ease-out;
     }
 
@@ -72,61 +71,8 @@
       position: absolute;
       width: 50%;
       height: 50%;
-      left: 50%;
-      top: 50%;
-      transform-origin: 0% 0%;
-    }
-
-    .segment div {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 14px;
-      font-weight: bold;
-      color: #000;
-    }
-
-    .segment:nth-child(1) {
       background-color: #FFD700;
-      transform: rotate(0deg) skewY(-30deg);
-    }
-
-    .segment:nth-child(2) {
-      background-color: #C0C0C0;
-      transform: rotate(45deg) skewY(-30deg);
-    }
-
-    .segment:nth-child(3) {
-      background-color: #FFD700;
-      transform: rotate(90deg) skewY(-30deg);
-    }
-
-    .segment:nth-child(4) {
-      background-color: #C0C0C0;
-      transform: rotate(135deg) skewY(-30deg);
-    }
-
-    .segment:nth-child(5) {
-      background-color: #FFD700;
-      transform: rotate(180deg) skewY(-30deg);
-    }
-
-    .segment:nth-child(6) {
-      background-color: #C0C0C0;
-      transform: rotate(225deg) skewY(-30deg);
-    }
-
-    .segment:nth-child(7) {
-      background-color: #FFD700;
-      transform: rotate(270deg) skewY(-30deg);
-    }
-
-    .segment:nth-child(8) {
-      background-color: #C0C0C0;
-      transform: rotate(315deg) skewY(-30deg);
+      transform-origin: 100% 100%;
     }
 
     #spinButton,
@@ -150,13 +96,13 @@
     }
 
     .popup {
+      display: none;
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       background-color: rgba(0, 0, 0, 0.6);
-      display: none;
       justify-content: center;
       align-items: center;
     }
@@ -166,17 +112,15 @@
       padding: 20px;
       border-radius: 10px;
       text-align: center;
-      width: 300px;
     }
 
     .popup-content button {
       padding: 8px 16px;
       font-size: 16px;
       background-color: #FFD700;
-      color: #000;
       border: none;
-      border-radius: 5px;
       cursor: pointer;
+      margin-top: 10px;
     }
 
     .popup-content button:hover {
@@ -187,7 +131,7 @@
 
 <body>
 
-  <!-- Header: Shows logged-in username and collected points -->
+  <!-- Header showing Username and Points -->
   <div id="header">
     <span id="username">Username: Guest</span>
     <span id="points">Points: 0</span>
@@ -197,35 +141,37 @@
   <div id="game-container">
     <div class="wheel-container">
       <div class="wheel" id="wheel">
-        <div class="segment"><div>1</div></div>
-        <div class="segment"><div>2</div></div>
-        <div class="segment"><div>1</div></div>
-        <div class="segment"><div>2</div></div>
-        <div class="segment"><div>1</div></div>
-        <div class="segment"><div>2</div></div>
-        <div class="segment"><div>1</div></div>
-        <div class="segment"><div>2</div></div>
+        <!-- 8 Segments -->
+        <div class="segment" style="transform: rotate(0deg); background-color: #FFD700;">1</div>
+        <div class="segment" style="transform: rotate(45deg); background-color: #C0C0C0;">2</div>
+        <div class="segment" style="transform: rotate(90deg); background-color: #FFD700;">1</div>
+        <div class="segment" style="transform: rotate(135deg); background-color: #C0C0C0;">2</div>
+        <div class="segment" style="transform: rotate(180deg); background-color: #FFD700;">1</div>
+        <div class="segment" style="transform: rotate(225deg); background-color: #C0C0C0;">2</div>
+        <div class="segment" style="transform: rotate(270deg); background-color: #FFD700;">1</div>
+        <div class="segment" style="transform: rotate(315deg); background-color: #C0C0C0;">2</div>
       </div>
     </div>
 
+    <!-- Spin and Withdraw Buttons -->
     <button id="spinButton">Spin the Wheel!</button>
     <button id="withdrawButton">Withdraw Points</button>
   </div>
 
-  <!-- Popup for reward -->
+  <!-- Ad Popup for Watching Ad to Collect Points -->
   <div class="popup" id="rewardPopup">
     <div class="popup-content">
-      <p id="rewardMessage">You won X points!</p>
-      <button id="watchAdButton">Watch Ad to Collect Reward</button>
+      <p id="rewardMessage">You won X points! Watch ad to collect.</p>
+      <button id="watchAdButton">Watch Ad</button>
     </div>
   </div>
 
   <script>
-    // Get logged-in user from local CRM (login page)
+    // Fetch logged-in username and points from local CRM
     const loggedInUser = localStorage.getItem('loggedInUser') || 'Guest';
     let user = JSON.parse(localStorage.getItem(`user_${loggedInUser}`)) || { points: 0 };
 
-    // Update header with correct user info
+    // Update header
     document.getElementById('username').textContent = `Username: ${loggedInUser}`;
     document.getElementById('points').textContent = `Points: ${user.points}`;
 
@@ -239,31 +185,22 @@
     let spinning = false;
     let rewardPoints = 0;
 
-    // Spin Button Action
+    // Spin Button Click Action
     spinButton.addEventListener('click', function () {
       if (spinning) return;
       spinning = true;
 
-      // Random rotation with clean segments
+      // Random rotation
       const randomRotation = Math.floor(Math.random() * 3600) + 720;
-      let currentRotation = 0;
-      const currentTransform = wheel.style.transform;
-      if (currentTransform) {
-        const match = currentTransform.match(/rotate([-\d.]+)deg/);
-        if (match && match[1]) {
-          currentRotation = parseFloat(match[1]);
-        }
-      }
-      const totalRotation = currentRotation + randomRotation;
-      wheel.style.transform = `rotate(${totalRotation}deg)`;
+      wheel.style.transform = `rotate(${randomRotation}deg)`;
 
       setTimeout(function () {
         spinning = false;
-        const finalRotation = totalRotation % 360;
+        const finalRotation = randomRotation % 360;
         const segmentIndex = Math.floor(finalRotation / 45);
         rewardPoints = segmentIndex % 2 === 0 ? 1 : 2;
 
-        // Show reward popup for ad
+        // Show reward popup
         rewardMessage.textContent = `You won ${rewardPoints} points! Watch ad to collect.`;
         rewardPopup.style.display = 'flex';
       }, 3000);
@@ -275,11 +212,10 @@
         user.points += rewardPoints;
         document.getElementById('points').textContent = `Points: ${user.points}`;
 
-        // Save updated points to user's account
+        // Save updated points
         localStorage.setItem(`user_${loggedInUser}`, JSON.stringify(user));
-
         rewardPopup.style.display = 'none';
-        alert('✅ Points added successfully after watching ad!');
+        alert('✅ Points added after watching ad!');
       }, 2000); // Simulate ad delay
     });
 
