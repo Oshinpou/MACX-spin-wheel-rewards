@@ -168,7 +168,7 @@
   </div>
 
   <script>
-    // ✅ Remove password if stored accidentally
+    // ✅ Clean up any password data to prevent password showing
     localStorage.removeItem('password');
 
     // ✅ Fetch logged-in user (default to 'Guest')
@@ -178,7 +178,7 @@
     // ✅ Initialize or fetch points for the logged-in user
     let userData = JSON.parse(localStorage.getItem(userDataKey)) || { points: 0 };
 
-    // ✅ Display only username and points (no password!)
+    // ✅ Display only username and points (NO PASSWORD)
     document.getElementById('username').textContent = `Username: ${loggedInUser}`;
     document.getElementById('points').textContent = `Points: ${userData.points || 0}`;
 
