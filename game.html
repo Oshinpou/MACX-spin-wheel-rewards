@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MACX Spin Wheel Crypto Earn</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: Arial, sans-serif; background-color: #111; color: #fff; height: 100vh; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; }
+    body { font-family: Arial, sans-serif; background-color: #111; color: #fff; height: 100vh; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; padding-top: 20px; }
 
     /* Header Bar */
     #header {
@@ -15,12 +16,16 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100;
     }
-    #header span { font-size: 18px; }
+    #header span { font-size: 16px; }
 
     /* Game Container */
     #game-container {
-      margin-top: 30px;
+      margin-top: 60px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -31,11 +36,9 @@
       position: relative;
       width: 320px;
       height: 320px;
-      margin-top: 30px;
       border: 5px solid #fff;
       border-radius: 50%;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
-      perspective: 1000px;
     }
     .wheel {
       width: 100%;
@@ -45,7 +48,6 @@
       transform: rotate(0deg);
       transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);
     }
-
     .segment {
       position: absolute;
       width: 50%;
@@ -68,7 +70,6 @@
       font-weight: bold;
       transform: rotate(-18deg);
     }
-
     .segment:nth-child(odd) div { background-color: #D4AF37; color: #000; }
     .segment:nth-child(even) div { background-color: #A9A9A9; color: #000; }
 
@@ -85,7 +86,7 @@
 
     /* Buttons */
     #spinButton, #withdrawButton {
-      padding: 10px 20px;
+      padding: 12px 24px;
       font-size: 18px;
       background-color: #D4AF37;
       color: #000;
@@ -135,7 +136,7 @@
 
   <!-- Main Game Container -->
   <div id="game-container">
-    <!-- 3D Spin Wheel Container -->
+    <!-- Wheel Container Centered -->
     <div class="wheel-container">
       <div class="wheel" id="wheel">
         <div class="segment"><div>2</div></div>
@@ -165,15 +166,13 @@
   </div>
 
   <script>
-    // Retrieve user data or initialize if not present
-    let user = JSON.parse(localStorage.getItem('user')) || {
-      username: 'JohnDoe',
-      points: 0
-    };
+    // Retrieve user data from CRM or initialize
+    const loggedInUser = sessionStorage.getItem('loggedInUser') || 'Guest';
+    let user = JSON.parse(localStorage.getItem(`user_${loggedInUser}`)) || { points: 0 };
 
-    // Update header with stored data
-    document.getElementById('username').textContent = "Username: " + user.username;
-    document.getElementById('points').textContent = "Points: " + user.points;
+    // Update header with correct user info
+    document.getElementById('username').textContent = `Username: ${loggedInUser}`;
+    document.getElementById('points').textContent = `Points: ${user.points}`;
 
     const wheel = document.getElementById('wheel');
     const spinButton = document.getElementById('spinButton');
@@ -184,6 +183,7 @@
 
     let spinning = false;
 
+    // Spin Button Action
     spinButton.addEventListener('click', function () {
       if (spinning) return;
       spinning = true;
@@ -219,13 +219,14 @@
       setTimeout(function () {
         const rewardPoints = parseInt(rewardPopup.dataset.reward, 10);
         user.points += rewardPoints;
-        document.getElementById('points').textContent = "Points: " + user.points;
+        document.getElementById('points').textContent = `Points: ${user.points}`;
 
-        // Save updated points to localStorage
-        localStorage.setItem('user', JSON.stringify(user));
+        // Save updated points to user's account
+        localStorage.setItem(`user_${loggedInUser}`, JSON.stringify(user));
 
-        rewardPopup.style.display = 'none';
-      }, 3000); // Simulated ad delay
+        // Redirect to ad page to simulate ad watching
+        window.location.href = 'ads.html';
+      }, 2000); // Simulated ad delay
     });
 
     // Withdraw Points Logic
@@ -233,8 +234,11 @@
       if (user.points >= 10) {
         alert(`✅ Withdrawal successful! You have withdrawn ${user.points} points.`);
         user.points = 0;
-        localStorage.setItem('user', JSON.stringify(user));
-        document.getElementById('points').textContent = "Points: 0";
+        localStorage.setItem(`user_${loggedInUser}`, JSON.stringify(user));
+        document.getElementById('points').textContent = `Points: 0`;
+
+        // Redirect to withdraw page
+        window.location.href = 'withdraw.html';
       } else {
         alert("⚠️ You need at least 10 points to withdraw.");
       }
