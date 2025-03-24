@@ -168,15 +168,19 @@
   </div>
 
   <script>
-    // Get logged-in username from localStorage
+    // Fetch logged-in user without password
     const loggedInUser = localStorage.getItem('loggedInUser') || 'Guest';
+    const userDataKey = `user_${loggedInUser}`;
 
-    // Get points data or initialize if not present
-    let userData = JSON.parse(localStorage.getItem(`user_${loggedInUser}`)) || { points: 0 };
+    // Check if user data exists or initialize with zero points
+    let userData = JSON.parse(localStorage.getItem(userDataKey)) || { points: 0 };
 
-    // Update header with username and points
+    // Show username and points correctly
     document.getElementById('username').textContent = `Username: ${loggedInUser}`;
-    document.getElementById('points').textContent = `Points: ${userData.points}`;
+    document.getElementById('points').textContent = `Points: ${userData.points || 0}`;
+
+    // Remove any stored passwords (for safety)
+    localStorage.removeItem('password');
 
     const wheel = document.getElementById('wheel');
     const spinButton = document.getElementById('spinButton');
@@ -216,7 +220,7 @@
         document.getElementById('points').textContent = `Points: ${userData.points}`;
 
         // Save updated points in local storage
-        localStorage.setItem(`user_${loggedInUser}`, JSON.stringify(userData));
+        localStorage.setItem(userDataKey, JSON.stringify(userData));
         rewardPopup.style.display = 'none';
         alert('✅ Points added after watching ad!');
       }, 2000); // Simulated ad delay
@@ -227,7 +231,7 @@
       if (userData.points >= 15000) {
         alert(`✅ Withdrawal successful! You withdrew ${userData.points} points.`);
         userData.points = 0;
-        localStorage.setItem(`user_${loggedInUser}`, JSON.stringify(userData));
+        localStorage.setItem(userDataKey, JSON.stringify(userData));
         document.getElementById('points').textContent = `Points: 0`;
         window.location.href = 'withdraw.html';
       } else {
@@ -235,7 +239,7 @@
       }
     });
 
-    // Clear password data if accidentally stored (for safety)
+    // Double-check password cleanup
     localStorage.removeItem('password');
   </script>
 
