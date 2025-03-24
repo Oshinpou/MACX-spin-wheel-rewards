@@ -73,6 +73,7 @@
       height: 50%;
       background-color: #FFD700;
       transform-origin: 100% 100%;
+      clip-path: polygon(100% 100%, 0% 100%, 0% 0%);
     }
 
     #spinButton,
@@ -141,15 +142,15 @@
   <div id="game-container">
     <div class="wheel-container">
       <div class="wheel" id="wheel">
-        <!-- 8 Segments -->
+        <!-- 8 Clean Segments -->
         <div class="segment" style="transform: rotate(0deg); background-color: #FFD700;">1</div>
         <div class="segment" style="transform: rotate(45deg); background-color: #C0C0C0;">2</div>
-        <div class="segment" style="transform: rotate(90deg); background-color: #FFD700;">1</div>
-        <div class="segment" style="transform: rotate(135deg); background-color: #C0C0C0;">2</div>
-        <div class="segment" style="transform: rotate(180deg); background-color: #FFD700;">1</div>
-        <div class="segment" style="transform: rotate(225deg); background-color: #C0C0C0;">2</div>
-        <div class="segment" style="transform: rotate(270deg); background-color: #FFD700;">1</div>
-        <div class="segment" style="transform: rotate(315deg); background-color: #C0C0C0;">2</div>
+        <div class="segment" style="transform: rotate(90deg); background-color: #FFD700;">3</div>
+        <div class="segment" style="transform: rotate(135deg); background-color: #C0C0C0;">4</div>
+        <div class="segment" style="transform: rotate(180deg); background-color: #FFD700;">5</div>
+        <div class="segment" style="transform: rotate(225deg); background-color: #C0C0C0;">6</div>
+        <div class="segment" style="transform: rotate(270deg); background-color: #FFD700;">7</div>
+        <div class="segment" style="transform: rotate(315deg); background-color: #C0C0C0;">8</div>
       </div>
     </div>
 
@@ -167,7 +168,7 @@
   </div>
 
   <script>
-    // Get logged-in username from local storage
+    // Get logged-in username from localStorage
     const loggedInUser = localStorage.getItem('loggedInUser') || 'Guest';
 
     // Get points data or initialize if not present
@@ -192,7 +193,7 @@
       if (spinning) return;
       spinning = true;
 
-      // Random rotation
+      // Random rotation (up to 360 degrees)
       const randomRotation = Math.floor(Math.random() * 3600) + 720;
       wheel.style.transform = `rotate(${randomRotation}deg)`;
 
@@ -200,7 +201,7 @@
         spinning = false;
         const finalRotation = randomRotation % 360;
         const segmentIndex = Math.floor(finalRotation / 45);
-        rewardPoints = segmentIndex % 2 === 0 ? 1 : 2;
+        rewardPoints = segmentIndex + 1; // Reward as per segment number
 
         // Show reward popup
         rewardMessage.textContent = `You won ${rewardPoints} points! Watch ad to collect.`;
@@ -214,11 +215,11 @@
         userData.points += rewardPoints;
         document.getElementById('points').textContent = `Points: ${userData.points}`;
 
-        // Save updated points
+        // Save updated points in local storage
         localStorage.setItem(`user_${loggedInUser}`, JSON.stringify(userData));
         rewardPopup.style.display = 'none';
         alert('✅ Points added after watching ad!');
-      }, 2000); // Simulate ad delay
+      }, 2000); // Simulated ad delay
     });
 
     // Withdraw Points Logic
@@ -234,7 +235,7 @@
       }
     });
 
-    // Clear password on login
+    // Clear password data if accidentally stored (for safety)
     localStorage.removeItem('password');
   </script>
 
