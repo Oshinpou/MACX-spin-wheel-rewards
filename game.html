@@ -17,6 +17,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
         }
         canvas {
             position: fixed;
@@ -26,6 +27,7 @@
         }
         .wheel-container {
             text-align: center;
+            margin-top: 20px;
         }
         #wheelCanvas {
             width: 300px;
@@ -68,6 +70,22 @@
             border: none;
             border-radius: 5px;
         }
+        .nav-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .nav-btn {
+            padding: 8px 16px;
+            background: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+        .nav-btn:hover {
+            background: #45a049;
+        }
     </style>
 </head>
 <body>
@@ -97,6 +115,15 @@
                 <h3>Watch Ad to Earn 50 Bonus Points</h3>
                 <button onclick="watchAdForBonus()">Watch Ad</button>
                 <p id="adStatus"></p>
+            </div>
+
+            <!-- Navigation Section -->
+            <div class="nav-container">
+                <button class="nav-btn" onclick="window.location.href='withdraw.html'">Withdraw</button>
+                <button class="nav-btn" onclick="window.location.href='faq.html'">FAQ</button>
+                <button class="nav-btn" onclick="window.location.href='about.html'">About</button>
+                <button class="nav-btn" onclick="window.location.href='tokens.html'">MACX Tokens</button>
+                <button class="nav-btn" onclick="window.location.href='contact.html'">Contact Us / Help</button>
             </div>
         </div>
     </div>
