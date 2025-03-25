@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About MACX - Empowering Crypto Revolution</title>
+    <style>
+        /* Basic Page Styling */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: #0a0a0a;
+            overflow-x: hidden;
+            color: #fff;
+        }
+
+        .container {
+            width: 100%;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 42px;
+            margin-top: 50px;
+            text-transform: uppercase;
+            color: #FFD700;
+            text-shadow: 0 0 20px #FFD700, 0 0 30px #FFEA00;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 20px #FFD700; }
+            100% { text-shadow: 0 0 40px #FFEA00; }
+        }
+
+        .section {
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #111, #333, #111);
+            margin: 20px auto;
+            border-radius: 12px;
+            max-width: 800px;
+            box-shadow: 0 0 15px #FFD700;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-in-out;
+        }
+
+        .section.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h2 {
+            font-size: 32px;
+            color: #FFD700;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #ccc;
+            margin-top: 10px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #FFD700;
+            color: #000;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+
+        .back-btn:hover {
+            background: #b7952c;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>About MACX</h1>
+
+        <!-- Section 1 -->
+        <div class="section">
+            <h2>Our Mission</h2>
+            <p>At MACX, we aim to empower the world by providing seamless access to cryptocurrency rewards, decentralized finance, and powerful tokenomics. We are dedicated to simplifying crypto adoption with user-centric products.</p>
+        </div>
+
+        <!-- Section 2 -->
+        <div class="section">
+            <h2>What is MACX Token?</h2>
+            <p>MACX Token is a revolutionary cryptocurrency based on Binance Smart Chain (BSC), allowing users to transact, stake, and earn rewards effortlessly through multiple platforms.</p>
+        </div>
+
+        <!-- Section 3 -->
+        <div class="section">
+            <h2>Why Choose MACX?</h2>
+            <p>MACX offers fast transactions, lower gas fees, and security while delivering high rewards for our community. Whether you're a beginner or a crypto expert, MACX makes it easy to participate.</p>
+        </div>
+
+        <!-- Section 4 -->
+        <div class="section">
+            <h2>Our Vision</h2>
+            <p>Our vision is to create a decentralized ecosystem where everyone has the opportunity to thrive financially and securely with MACX’s advanced blockchain technology.</p>
+        </div>
+
+        <!-- Section 5 -->
+        <div class="section">
+            <h2>Join the Revolution</h2>
+            <p>Be part of the future with MACX. Explore new opportunities in the crypto space and unlock rewards by participating in our Spin Wheel, staking options, and more!</p>
+        </div>
+
+        <a href="index.html" class="back-btn">Back to Home</a>
+    </div>
+
+    <script>
+        // Animation for Sections on Scroll
+        const sections = document.querySelectorAll('.section');
+
+        const scrollAppear = () => {
+            sections.forEach(section => {
+                const sectionPosition = section.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight - 100;
+
+                if (sectionPosition < windowHeight) {
+                    section.classList.add('active');
+                } else {
+                    section.classList.remove('active');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', scrollAppear);
+    </script>
+
+</body>
+</html>
