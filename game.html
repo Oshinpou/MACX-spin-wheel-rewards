@@ -2,8 +2,8 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MACX Spin Wheel</title>
   <style>
     * {
@@ -20,11 +20,10 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 100vh;
     }
 
     #header {
-      width: 130%;
+      width: 100%;
       padding: 15px 20px;
       background-color: #222;
       display: flex;
@@ -32,21 +31,13 @@
       position: fixed;
       top: 0;
       left: 0;
-      z-index: 1000;
-    }
-
-    #header span {
-      font-size: 8px;
-      font-weight: bold;
     }
 
     #game-container {
       margin-top: 80px;
+      max-width: 500px;
       width: 100%;
-      max-width: 400px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      text-align: center;
     }
 
     .wheel-container {
@@ -55,15 +46,13 @@
       height: 300px;
       border: 5px solid #fff;
       border-radius: 50%;
-      overflow: hidden;
-      margin-top: 20px;
+      margin: 20px auto;
     }
 
     .wheel {
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      position: relative;
       transition: transform 3s ease-out;
     }
 
@@ -71,178 +60,75 @@
       position: absolute;
       width: 50%;
       height: 50%;
-      background-color: #FFD700;
+      background-color: #ffd700;
       transform-origin: 100% 100%;
-      clip-path: polygon(100% 100%, 0% 100%, 0% 0%);
+      clip-path: polygon(100% 100%, 0 100%, 0 0);
     }
 
-    #spinButton,
-    #withdrawButton {
-      width: 90%;
-      max-width: 300px;
-      padding: 12px;
+    button {
+      padding: 12px 20px;
       margin-top: 20px;
-      background-color: #FFD700;
+      background-color: #ffd700;
       color: #000;
       border: none;
       border-radius: 5px;
       font-size: 18px;
-      font-weight: bold;
       cursor: pointer;
     }
 
-    #spinButton:hover,
-    #withdrawButton:hover {
-      background-color: #e6c200;
-    }
-
-    .popup {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.6);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .popup-content {
-      background-color: #222;
-      padding: 20px;
-      border-radius: 10px;
-      text-align: center;
-    }
-
-    .popup-content button {
-      padding: 8px 16px;
-      font-size: 16px;
-      background-color: #FFD700;
-      border: none;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    .popup-content button:hover {
+    button:hover {
       background-color: #e6c200;
     }
   </style>
 </head>
 
 <body>
-
-  <!-- Header showing Username and Points -->
   <div id="header">
     <span id="username">Username: Guest</span>
     <span id="points">Points: 0</span>
   </div>
 
-  <!-- Main Game Container -->
   <div id="game-container">
     <div class="wheel-container">
       <div class="wheel" id="wheel">
-        <!-- 8 Clean Segments -->
-        <div class="segment" style="transform: rotate(0deg); background-color: #FFD700;">1</div>
-        <div class="segment" style="transform: rotate(45deg); background-color: #C0C0C0;">2</div>
-        <div class="segment" style="transform: rotate(90deg); background-color: #FFD700;">3</div>
-        <div class="segment" style="transform: rotate(135deg); background-color: #C0C0C0;">4</div>
-        <div class="segment" style="transform: rotate(180deg); background-color: #FFD700;">5</div>
-        <div class="segment" style="transform: rotate(225deg); background-color: #C0C0C0;">6</div>
-        <div class="segment" style="transform: rotate(270deg); background-color: #FFD700;">7</div>
-        <div class="segment" style="transform: rotate(315deg); background-color: #C0C0C0;">8</div>
+        <div class="segment" style="transform: rotate(0deg);">1</div>
+        <div class="segment" style="transform: rotate(45deg);">2</div>
+        <div class="segment" style="transform: rotate(90deg);">3</div>
+        <div class="segment" style="transform: rotate(135deg);">4</div>
+        <div class="segment" style="transform: rotate(180deg);">5</div>
+        <div class="segment" style="transform: rotate(225deg);">6</div>
+        <div class="segment" style="transform: rotate(270deg);">7</div>
+        <div class="segment" style="transform: rotate(315deg);">8</div>
       </div>
     </div>
 
-    <!-- Spin and Withdraw Buttons -->
     <button id="spinButton">Spin the Wheel!</button>
     <button id="withdrawButton">Withdraw Points</button>
-  </div>
-
-  <!-- Ad Popup for Watching Ad to Collect Points -->
-  <div class="popup" id="rewardPopup">
-    <div class="popup-content">
-      <p id="rewardMessage">You won X points! Watch ad to collect.</p>
-      <button id="watchAdButton">Watch Ad</button>
-    </div>
+    <button onclick="location.href='faq.html'">FAQ / About</button>
+    <button onclick="location.href='contact.html'">Help / Contact Us</button>
   </div>
 
   <script>
-    // ✅ Clean up any password data to prevent password showing
-    localStorage.removeItem('password');
-
-    // ✅ Fetch logged-in user (default to 'Guest')
-    const loggedInUser = localStorage.getItem('loggedInUser') || 'Guest';
-    const userDataKey = `user_${loggedInUser}`;
-
-    // ✅ Initialize or fetch points for the logged-in user
-    let userData = JSON.parse(localStorage.getItem(userDataKey)) || { points: 0 };
-
-    // ✅ Display only username and points (NO PASSWORD)
-    document.getElementById('username').textContent = `Username: ${loggedInUser}`;
-    document.getElementById('points').textContent = `Points: ${userData.points || 0}`;
-
-    const wheel = document.getElementById('wheel');
-    const spinButton = document.getElementById('spinButton');
-    const withdrawButton = document.getElementById('withdrawButton');
-    const rewardPopup = document.getElementById('rewardPopup');
-    const rewardMessage = document.getElementById('rewardMessage');
-    const watchAdButton = document.getElementById('watchAdButton');
-
+    const wheel = document.getElementById("wheel");
+    const spinButton = document.getElementById("spinButton");
+    const withdrawButton = document.getElementById("withdrawButton");
     let spinning = false;
-    let rewardPoints = 0;
 
-    // ✅ Spin Button Action
-    spinButton.addEventListener('click', function () {
+    spinButton.addEventListener("click", () => {
       if (spinning) return;
       spinning = true;
-
-      // ✅ Random rotation logic
-      const randomRotation = Math.floor(Math.random() * 3600) + 720;
-      wheel.style.transform = `rotate(${randomRotation}deg)`;
-
-      setTimeout(function () {
+      const rotation = Math.floor(Math.random() * 3600) + 720;
+      wheel.style.transform = `rotate(${rotation}deg)`;
+      setTimeout(() => {
+        alert("You won points!");
         spinning = false;
-        const finalRotation = randomRotation % 360;
-        const segmentIndex = Math.floor(finalRotation / 45);
-        rewardPoints = segmentIndex + 1;
-
-        // ✅ Show reward popup
-        rewardMessage.textContent = `You won ${rewardPoints} points! Watch ad to collect.`;
-        rewardPopup.style.display = 'flex';
       }, 3000);
     });
 
-    // ✅ Watch Ad to Collect Points
-    watchAdButton.addEventListener('click', function () {
-      setTimeout(function () {
-        userData.points += rewardPoints;
-        document.getElementById('points').textContent = `Points: ${userData.points}`;
-
-        // ✅ Save points correctly
-        localStorage.setItem(userDataKey, JSON.stringify(userData));
-        rewardPopup.style.display = 'none';
-        alert('✅ Points added after watching ad!');
-      }, 2000);
+    withdrawButton.addEventListener("click", () => {
+      window.location.href = "withdraw.html";
     });
-
-    // ✅ Withdraw Points Logic
-    withdrawButton.addEventListener('click', function () {
-      if (userData.points >= 15000) {
-        alert(`✅ Withdrawal successful! You withdrew ${userData.points} points.`);
-        userData.points = 0;
-        localStorage.setItem(userDataKey, JSON.stringify(userData));
-        document.getElementById('points').textContent = `Points: 0`;
-        window.location.href = 'withdraw.html';
-      } else {
-        alert("⚠️ Minimum 15,000 points required to withdraw.");
-      }
-    });
-
-    // ✅ Final cleanup to prevent password leakage
-    localStorage.removeItem('password');
   </script>
-
 </body>
 
 </html>
