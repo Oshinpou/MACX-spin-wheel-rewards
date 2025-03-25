@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MACX FAQ - Frequently Asked Questions</title>
+    <style>
+        /* Basic Page Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(45deg, #0a0a0a, #222, #0a0a0a);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px #FFD700;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 36px;
+            text-transform: uppercase;
+            color: #FFD700;
+            text-shadow: 2px 2px 15px #FFD700;
+            margin-bottom: 20px;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 2px 2px 15px #FFD700; }
+            100% { text-shadow: 2px 2px 30px #FFEA00; }
+        }
+
+        .faq-item {
+            background: #333;
+            margin: 10px 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 15px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            background: #444;
+            color: #FFD700;
+            border-bottom: 1px solid #FFD700;
+            transition: background 0.3s;
+        }
+
+        .faq-question:hover {
+            background: #555;
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 15px 20px;
+            background: #222;
+            color: #fff;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .active .faq-answer {
+            display: block;
+        }
+
+        .faq-question::after {
+            content: '+';
+            float: right;
+            font-size: 18px;
+            transition: transform 0.3s;
+        }
+
+        .active .faq-question::after {
+            content: '-';
+            transform: rotate(180deg);
+        }
+
+        .back-btn {
+            display: block;
+            width: 150px;
+            padding: 10px 20px;
+            background: #FFD700;
+            color: #000;
+            font-weight: bold;
+            text-decoration: none;
+            text-align: center;
+            margin: 20px auto;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .back-btn:hover {
+            background: #b7952c;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>MACX Frequently Asked Questions</h1>
+
+        <!-- FAQ 1 -->
+        <div class="faq-item">
+            <div class="faq-question">1. What is MACX Token?</div>
+            <div class="faq-answer">MACX Token is a cryptocurrency built on the Binance Smart Chain (BSC) that can be used for transactions, rewards, and staking.</div>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="faq-item">
+            <div class="faq-question">2. How can I buy MACX Token?</div>
+            <div class="faq-answer">You can buy MACX Tokens from PancakeSwap using BNB or other compatible cryptocurrencies.</div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="faq-item">
+            <div class="faq-question">3. What is the contract address of MACX?</div>
+            <div class="faq-answer">The contract address of MACX Token is: <br><strong>0x123456789ABCDEF0123456789ABCDEF012345678</strong></div>
+        </div>
+
+        <!-- FAQ 4 -->
+        <div class="faq-item">
+            <div class="faq-question">4. How do I withdraw my earnings from MACX Crypto Wheel?</div>
+            <div class="faq-answer">To withdraw, go to the withdraw page, enter your wallet address, choose the network and coin, and submit your request.</div>
+        </div>
+
+        <!-- FAQ 5 -->
+        <div class="faq-item">
+            <div class="faq-question">5. What is the minimum withdrawal amount?</div>
+            <div class="faq-answer">The minimum withdrawal amount is 1,000,000 points, which equals 1 USDT, 1000 SATS BTC, 10000 ETH, or 1000 MACX coins.</div>
+        </div>
+
+        <!-- FAQ 6 -->
+        <div class="faq-item">
+            <div class="faq-question">6. How do I contact MACX support?</div>
+            <div class="faq-answer">You can contact us through the 'Contact Us' page, where you can also chat directly with the admin.</div>
+        </div>
+
+        <!-- FAQ 7 -->
+        <div class="faq-item">
+            <div class="faq-question">7. Is there a way to earn free MACX tokens?</div>
+            <div class="faq-answer">Yes, you can earn free MACX tokens by participating in events, completing tasks, or using the MACX Spin Wheel.</div>
+        </div>
+
+        <!-- FAQ 8 -->
+        <div class="faq-item">
+            <div class="faq-question">8. How do I reset my password?</div>
+            <div class="faq-answer">To reset your password, go to the login page and click on 'Forgot Password,' then follow the instructions provided.</div>
+        </div>
+
+        <!-- FAQ 9 -->
+        <div class="faq-item">
+            <div class="faq-question">9. What networks does MACX support?</div>
+            <div class="faq-answer">MACX supports the Binance Smart Chain (BSC) and can be exchanged via PancakeSwap.</div>
+        </div>
+
+        <!-- FAQ 10 -->
+        <div class="faq-item">
+            <div class="faq-question">10. How do I know my withdrawal request was successful?</div>
+            <div class="faq-answer">You will receive a confirmation notification, and the transaction status can be tracked through the admin panel.</div>
+        </div>
+
+        <a href="index.html" class="back-btn">Back to Home</a>
+    </div>
+
+    <script>
+        // FAQ Accordion Logic
+        const faqItems = document.querySelectorAll('.faq-item');
+
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>
