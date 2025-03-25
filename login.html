@@ -5,14 +5,21 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #1a1a1a;
+            background: radial-gradient(circle, #0f0c29, #302b63, #24243e);
             color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
+            height: 100vh;
+            overflow: hidden;
         }
+        
+        /* Particle Background */
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
         .form-container {
             background-color: #222;
             padding: 20px;
@@ -20,9 +27,15 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
             width: 320px;
             text-align: center;
+            margin-top: 50px;
+            animation: fadeIn 2s;
         }
         h2, h3 {
             margin-top: 0;
+            font-family: 'Cursive';
+            font-size: 24px;
+            color: #D4AF37;
+            text-shadow: 0 0 10px #D4AF37;
         }
         input, button {
             width: 100%;
@@ -35,19 +48,53 @@
             background-color: #D4AF37;
             color: #000;
             cursor: pointer;
+            transition: transform 0.3s;
         }
         button:hover {
             background-color: #b7952c;
+            transform: scale(1.05);
         }
         .error-msg {
             color: #ff4d4d;
             margin-top: 10px;
         }
+
+        /* Slider Styles */
+        .slider-container {
+            width: 100%;
+            overflow: hidden;
+            position: absolute;
+            bottom: 20px;
+        }
+        .slider {
+            display: flex;
+            animation: slide 10s infinite linear;
+        }
+        .slide {
+            background: #D4AF37;
+            color: #000;
+            padding: 10px;
+            margin: 0 5px;
+            border-radius: 8px;
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Keyframes */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
     </style>
 </head>
 <body>
+    <canvas id="particles"></canvas>
+
     <div class="form-container">
-        <h2>User Sign Up / Login</h2>
+        <h2>Welcome to MACX Crypto Wheel</h2>
 
         <!-- Sign Up Form -->
         <form id="signupForm">
@@ -68,8 +115,18 @@
         <div id="error" class="error-msg"></div>
     </div>
 
+    <!-- Slider for Crypto Info -->
+    <div class="slider-container">
+        <div class="slider">
+            <div class="slide">Earn Bitcoin (BTC)</div>
+            <div class="slide">Earn Ethereum (ETH)</div>
+            <div class="slide">Earn USDT</div>
+            <div class="slide">Earn Solana (SOL)</div>
+            <div class="slide">Earn Binance Coin (BNB)</div>
+        </div>
+    </div>
+
     <script>
-        // Get stored user data from localStorage
         let users = JSON.parse(localStorage.getItem('users')) || [];
 
         // Sign Up Logic
@@ -82,14 +139,12 @@
                 return;
             }
 
-            // Check if user already exists
             const existingUser = users.find(user => user.username === username);
             if (existingUser) {
                 showError("Username already exists. Try another one.");
                 return;
             }
 
-            // Add new user
             const newUser = {
                 username: username,
                 password: password,
@@ -112,16 +167,73 @@
                 return;
             }
 
-            // Store logged-in user in session
             localStorage.setItem('loggedInUser', JSON.stringify(user));
             alert("Login Successful! Redirecting...");
-            window.location.href = "game.html"; // Redirect to game page
+            window.location.href = "game.html";
         }
 
         // Error message display
         function showError(message) {
             document.getElementById('error').textContent = message;
         }
+
+        // Particle Background Effect
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray = [];
+        const colors = ["#D4AF37", "#FF6347", "#87CEEB", "#00FF00"];
+        
+        class Particle {
+            constructor(x, y, size, color, speedX, speedY) {
+                this.x = x;
+                this.y = y;
+                this.size = size;
+                this.color = color;
+                this.speedX = speedX;
+                this.speedY = speedY;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.size > 0.2) this.size -= 0.1;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.fill();
+            }
+        }
+
+        function createParticles(e) {
+            const xPos = e.x;
+            const yPos = e.y;
+            for (let i = 0; i < 5; i++) {
+                particlesArray.push(new Particle(
+                    xPos, yPos,
+                    Math.random() * 8 + 2,
+                    colors[Math.floor(Math.random() * colors.length)],
+                    (Math.random() - 0.5) * 2,
+                    (Math.random() - 0.5) * 2
+                ));
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particlesArray.forEach((particle, index) => {
+                particle.update();
+                particle.draw();
+                if (particle.size <= 0.2) particlesArray.splice(index, 1);
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        window.addEventListener('mousemove', createParticles);
+        animateParticles();
     </script>
 </body>
 </html>
