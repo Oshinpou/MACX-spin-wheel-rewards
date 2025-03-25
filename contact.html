@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MACX - Contact & Chat Support</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0d0d0d;
+            font-family: Arial, sans-serif;
+            color: #fff;
+        }
+
+        .container {
+            width: 50%;
+            margin: 50px auto;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px #FFD700;
+            text-align: center;
+        }
+
+        h2 {
+            color: #FFD700;
+            margin-bottom: 20px;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        .chat-box {
+            width: 100%;
+            height: 300px;
+            background: #2c2c2c;
+            overflow-y: scroll;
+            border: 1px solid #444;
+            border-radius: 5px;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .chat-box p {
+            margin: 5px 0;
+        }
+
+        .message-input {
+            width: calc(100% - 80px);
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            background: #FFD700;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #b7952c;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px 20px;
+            background: #ff4d4d;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .logout-btn:hover {
+            background: #e60000;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Logout Button -->
+    <button class="logout-btn" onclick="logout()">Logout</button>
+
+    <div class="container">
+        <h2>Contact Support - Chat with Admin</h2>
+        
+        <p>Welcome, <strong><span id="username"></span></strong>!</p>
+        <p>Your Available Points: <strong><span id="points">0</span></strong></p>
+
+        <!-- Chat Box -->
+        <div class="chat-box" id="chatBox">
+            <p>💬 Start a chat or view ongoing conversation...</p>
+        </div>
+
+        <!-- Message Input -->
+        <input type="text" id="messageInput" class="message-input" placeholder="Type a message..." />
+        <button onclick="sendMessage()">Send</button>
+        <button onclick="startNewChat()">Start New Chat</button>
+        <button onclick="deleteChat()">Delete Chat</button>
+    </div>
+
+    <script>
+        // Load User Info
+        let loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+        if (!loggedInUser) {
+            alert('❌ No user logged in. Redirecting to login page.');
+            window.location.href = 'login.html';
+        } else {
+            document.getElementById('username').innerText = loggedInUser.username;
+            document.getElementById('points').innerText = loggedInUser.points;
+        }
+
+        // Fetch Chat Messages
+        let chatData = JSON.parse(localStorage.getItem('chat_' + loggedInUser.username)) || [];
+        updateChatBox();
+
+        // Send Message
+        function sendMessage() {
+            let message = document.getElementById('messageInput').value;
+            if (message.trim() === '') {
+                alert('❗ Message cannot be empty.');
+                return;
+            }
+
+            let chatMessage = {
+                sender: 'user',
+                message: message,
+                timestamp: new Date().toLocaleString()
+            };
+
+            chatData.push(chatMessage);
+            localStorage.setItem('chat_' + loggedInUser.username, JSON.stringify(chatData));
+            updateChatBox();
+            document.getElementById('messageInput').value = '';
+        }
+
+        // Update Chat Box
+        function updateChatBox() {
+            let chatBox = document.getElementById('chatBox');
+            chatBox.innerHTML = '';
+            if (chatData.length === 0) {
+                chatBox.innerHTML = '<p>💬 No ongoing chat. Start a new chat!</p>';
+            } else {
+                chatData.forEach(msg => {
+                    let senderStyle = msg.sender === 'user' ? 'color: #FFD700;' : 'color: #00FF00;';
+                    chatBox.innerHTML += `<p><strong style="${senderStyle}">${msg.sender === 'user' ? 'You' : 'Admin'}:</strong> ${msg.message} <small style="color: #888;">(${msg.timestamp})</small></p>`;
+                });
+            }
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // Start New Chat
+        function startNewChat() {
+            if (confirm('⚡ Start a new chat? Previous messages will be deleted.')) {
+                localStorage.removeItem('chat_' + loggedInUser.username);
+                chatData = [];
+                updateChatBox();
+            }
+        }
+
+        // Delete Chat
+        function deleteChat() {
+            if (confirm('❌ Are you sure you want to delete the chat?')) {
+                localStorage.removeItem('chat_' + loggedInUser.username);
+                chatData = [];
+                updateChatBox();
+            }
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('loggedInUser');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>
