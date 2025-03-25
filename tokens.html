@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MACX Token - Details & Exchange</title>
+    <style>
+        /* Background Animation */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            text-align: center;
+            overflow: hidden;
+            background: linear-gradient(45deg, #0a0a0a, #222, #0a0a0a);
+            animation: bgAnimation 10s infinite linear;
+        }
+
+        @keyframes bgAnimation {
+            0% { background-position: 0 0; }
+            100% { background-position: 1000px 1000px; }
+        }
+
+        .container {
+            margin: 50px auto;
+            width: 80%;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px #FFD700;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #FFD700;
+            text-shadow: 2px 2px 10px #FFD700;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 2px 2px 10px #FFD700; }
+            100% { text-shadow: 2px 2px 20px #FFEA00; }
+        }
+
+        .token-info {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .token-info p {
+            margin: 10px 0;
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: #FFD700;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 20px;
+            margin-top: 20px;
+            background: #FFD700;
+            color: #000;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: 0.3s ease-in-out;
+        }
+
+        .button:hover {
+            background: #b7952c;
+        }
+
+        .exchange-logo {
+            width: 150px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>MACX Token Details</h1>
+
+        <div class="token-info">
+            <p><span class="highlight">Token Name:</span> MACX</p>
+            <p><span class="highlight">Token Symbol:</span> MACX</p>
+            <p><span class="highlight">Contract Address:</span> 0x123456789ABCDEF0123456789ABCDEF012345678</p>
+            <p><span class="highlight">Chain ID:</span> 56 (Binance Smart Chain)</p>
+            <p><span class="highlight">Network:</span> BSC (Binance Smart Chain)</p>
+            <p><span class="highlight">Exchange:</span> PancakeSwap</p>
+        </div>
+
+        <a href="https://pancakeswap.finance/swap?outputCurrency=0x123456789ABCDEF0123456789ABCDEF012345678" target="_blank" class="button">Trade on PancakeSwap</a>
+
+        <img src="https://cryptologos.cc/logos/pancakeswap-cake-logo.png" class="exchange-logo" alt="PancakeSwap Logo">
+    </div>
+
+</body>
+</html>
