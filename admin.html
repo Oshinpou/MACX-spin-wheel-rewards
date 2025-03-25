@@ -2,15 +2,103 @@
 <html>
 <head>
     <title>Admin Panel</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #333;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #D4AF37;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #b7952c;
+        }
+    </style>
 </head>
 <body>
     <h1>Admin Panel - User Management</h1>
     <div id="userList"></div>
+    <h2>Account Requests</h2>
+    <div id="requestList"></div>
 
-    <script src="script.js"></script>
     <script>
-        loadUsers(); // Load user details in admin panel
+        function loadUsers() {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const requests = JSON.parse(localStorage.getItem('requests')) || [];
+
+            let userListHTML = '<ul>';
+            users.forEach((user, index) => {
+                userListHTML += `
+                    <li>
+                        <strong>Username:</strong> ${user.username} | 
+                        <strong>Password:</strong> ${user.password} | 
+                        <strong>Points:</strong> ${user.points}
+                        <button onclick="deleteUser(${index})">Delete</button>
+                    </li>
+                `;
+            });
+            userListHTML += '</ul>';
+            document.getElementById('userList').innerHTML = userListHTML;
+
+            let requestListHTML = '<ul>';
+            requests.forEach((req, index) => {
+                requestListHTML += `
+                    <li>
+                        <strong>Type:</strong> ${req.type.toUpperCase()} | 
+                        <strong>Username:</strong> ${req.username} | 
+                        <strong>Email:</strong> ${req.email}
+                        <button onclick="processRequest(${index})">Process</button>
+                    </li>
+                `;
+            });
+            requestListHTML += '</ul>';
+            document.getElementById('requestList').innerHTML = requestListHTML;
+        }
+
+        function deleteUser(index) {
+            let users = JSON.parse(localStorage.getItem('users'));
+            users.splice(index, 1);
+            localStorage.setItem('users', JSON.stringify(users));
+            loadUsers();
+        }
+
+        function processRequest(index) {
+            let requests = JSON.parse(localStorage.getItem('requests'));
+            const req = requests[index];
+            if (req.type === 'delete') {
+                deleteUserByName(req.username);
+            }
+            requests.splice(index, 1);
+            localStorage.setItem('requests', JSON.stringify(requests));
+            loadUsers();
+        }
+
+        function deleteUserByName(username) {
+            let users = JSON.parse(localStorage.getItem('users'));
+            users = users.filter(user => user.username !== username);
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        loadUsers();
     </script>
 </body>
 </html>
