@@ -9,7 +9,6 @@
             background: #1a1a1a;
             font-family: Arial, sans-serif;
             color: #fff;
-            overflow: hidden;
         }
         #game-container {
             width: 100vw;
@@ -20,21 +19,8 @@
             flex-direction: column;
         }
         canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: -1;
-        }
-        .wheel-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-        #wheelCanvas {
-            width: 300px;
-            height: 300px;
             border: 5px solid #D4AF37;
             border-radius: 50%;
-            background: #fff;
         }
         button {
             margin-top: 10px;
@@ -47,18 +33,6 @@
         }
         button:hover {
             background-color: #b7952c;
-        }
-        #points-container {
-            margin-top: 20px;
-        }
-        .section-container {
-            margin-top: 20px;
-            background-color: rgba(34, 34, 34, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-        }
-        #ad-container, #double-points-container {
-            margin-top: 20px;
         }
         .logout-btn {
             position: absolute;
@@ -89,81 +63,31 @@
     </style>
 </head>
 <body>
-    <canvas id="particleCanvas"></canvas>
 
     <!-- Logout Button -->
     <button class="logout-btn" onclick="logout()">Logout</button>
 
     <div id="game-container">
-        <div class="wheel-container">
-            <h2>Welcome, <span id="username"></span>!</h2>
-            <h3>Your Points: <span id="points">0</span></h3>
+        <h2>Welcome, <span id="username"></span>!</h2>
+        <h3>Your Points: <span id="points">0</span></h3>
 
-            <!-- Spin Wheel Section -->
-            <canvas id="wheelCanvas"></canvas>
-            <button onclick="spinWheel()">Spin the Wheel</button>
+        <!-- Spin Wheel Section -->
+        <canvas id="wheelCanvas" width="300" height="300"></canvas>
+        <button onclick="spinWheel()">Spin the Wheel</button>
 
-            <!-- Watch Ad to Double Spin Points -->
-            <div id="double-points-container" class="section-container">
-                <h3>Double Your Spin Points by Watching an Ad</h3>
-                <button onclick="watchAdForDoublePoints()">Watch Ad to Double Points</button>
-                <p id="doubleAdStatus"></p>
-            </div>
+        <p id="adStatus"></p>
 
-            <!-- Watch Ad to Earn Bonus Points -->
-            <div id="ad-container" class="section-container">
-                <h3>Watch Ad to Earn 50 Bonus Points</h3>
-                <button onclick="watchAdForBonus()">Watch Ad</button>
-                <p id="adStatus"></p>
-            </div>
-
-            <!-- Navigation Section -->
-            <div class="nav-container">
-                <button class="nav-btn" onclick="window.location.href='withdraw.html'">Withdraw</button>
-                <button class="nav-btn" onclick="window.location.href='faq.html'">FAQ</button>
-                <button class="nav-btn" onclick="window.location.href='about.html'">About</button>
-                <button class="nav-btn" onclick="window.location.href='tokens.html'">MACX Tokens</button>
-                <button class="nav-btn" onclick="window.location.href='contact.html'">Contact Us / Help</button>
-            </div>
+        <!-- Navigation Section -->
+        <div class="nav-container">
+            <button class="nav-btn" onclick="window.location.href='withdraw.html'">Withdraw</button>
+            <button class="nav-btn" onclick="window.location.href='faq.html'">FAQ</button>
+            <button class="nav-btn" onclick="window.location.href='about.html'">About</button>
+            <button class="nav-btn" onclick="window.location.href='tokens.html'">MACX Tokens</button>
+            <button class="nav-btn" onclick="window.location.href='contact.html'">Contact Us / Help</button>
         </div>
     </div>
 
     <script>
-        // Particle Background Animation
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const particles = [];
-        for (let i = 0; i < 100; i++) {
-            particles.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                radius: Math.random() * 3,
-                dx: Math.random() - 0.5,
-                dy: Math.random() - 0.5
-            });
-        }
-
-        function drawParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#D4AF37';
-            particles.forEach(p => {
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                ctx.fill();
-
-                p.x += p.dx;
-                p.y += p.dy;
-
-                if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
-                if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
-            });
-            requestAnimationFrame(drawParticles);
-        }
-        drawParticles();
-
         // Load logged-in user data
         let loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
         if (!loggedInUser) {
@@ -174,7 +98,7 @@
             document.getElementById('points').innerText = loggedInUser.points;
         }
 
-        // Spin Wheel Setup
+        // Wheel Setup
         const wheelCanvas = document.getElementById('wheelCanvas');
         const wheelCtx = wheelCanvas.getContext('2d');
         const wheelSegments = [10, 20, 30, 40, 50, 100, 200, 500];
@@ -182,7 +106,6 @@
         const segmentAngle = 2 * Math.PI / wheelSegments.length;
         let isSpinning = false;
         let spinPoints = 0;
-        let adWatchedForDouble = false;
 
         // Draw Wheel
         function drawWheel() {
@@ -195,7 +118,7 @@
                 wheelCtx.fill();
 
                 wheelCtx.fillStyle = '#000';
-                wheelCtx.font = '16px Arial';
+                wheelCtx.font = '14px Arial';
                 wheelCtx.fillText(wheelSegments[i] + ' pts', 120 + 70 * Math.cos(i * segmentAngle + segmentAngle / 2), 130 + 70 * Math.sin(i * segmentAngle + segmentAngle / 2));
             }
         }
@@ -224,21 +147,34 @@
                 } else {
                     const finalSegmentIndex = Math.floor(((randomAngle % (2 * Math.PI)) / segmentAngle)) % wheelSegments.length;
                     spinPoints = wheelSegments[finalSegmentIndex];
-
-                    if (adWatchedForDouble) {
-                        spinPoints *= 2;
-                        adWatchedForDouble = false;
-                        document.getElementById('doubleAdStatus').innerText = '✅ Double points applied!';
-                    }
-
-                    updatePoints(spinPoints);
+                    askToWatchAd();
                     isSpinning = false;
                 }
             }
             requestAnimationFrame(animateSpin);
         }
 
-        // Update Points in Local Storage
+        // Prompt to Watch Ad for Points
+        function askToWatchAd() {
+            const adConfirmation = confirm(`🎥 Watch an ad to collect ${spinPoints} points?`);
+            if (adConfirmation) {
+                watchAdToCollectPoints(spinPoints);
+            } else {
+                spinPoints = 0;
+                alert('❌ You skipped the ad. Points not collected.');
+            }
+        }
+
+        // Watch Ad to Collect Points
+        function watchAdToCollectPoints(points) {
+            document.getElementById('adStatus').innerText = '🎥 Watching ad...';
+            setTimeout(() => {
+                document.getElementById('adStatus').innerText = '✅ Ad watched! Points added.';
+                updatePoints(points);
+            }, 5000); // Simulate 5-second ad
+        }
+
+        // Update Points after Watching Ad
         function updatePoints(points) {
             loggedInUser.points += points;
             localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
@@ -251,33 +187,7 @@
             }
 
             document.getElementById('points').innerText = loggedInUser.points;
-            alert(`🎉 You won ${points} points!`);
-        }
-
-        // Watch Ad to Earn Bonus Points (50 points)
-        function watchAdForBonus() {
-            document.getElementById('adStatus').innerText = '🎥 Watching ad...';
-            setTimeout(() => {
-                document.getElementById('adStatus').innerText = '✅ Ad watched! You earned 50 bonus points.';
-                addBonusPoints(50);
-            }, 5000);
-        }
-
-        function addBonusPoints(points) {
-            loggedInUser.points += points;
-            localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
-            document.getElementById('points').innerText = loggedInUser.points;
-            alert(`🎉 You earned ${points} bonus points!`);
-        }
-
-        // Watch Ad to Double Spin Points
-        function watchAdForDoublePoints() {
-            document.getElementById('doubleAdStatus').innerText = '🎥 Watching ad to double points...';
-            setTimeout(() => {
-                adWatchedForDouble = true;
-                document.getElementById('doubleAdStatus').innerText = '✅ You can now double your next spin points!';
-                alert('🎉 Ad watched! Your next spin points will be doubled.');
-            }, 5000);
+            alert(`🎉 You collected ${points} points!`);
         }
 
         // Logout Function
