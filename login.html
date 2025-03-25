@@ -3,80 +3,41 @@
 <head>
     <title>Login / Sign Up</title>
     <style>
-        * {
+        body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-        body {
+            background-color: #1a1a1a;
             font-family: Arial, sans-serif;
-            background-color: #1a1a1a;
-            overflow: hidden;
-        }
-        #particles-js {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            background-color: #1a1a1a;
-            z-index: -1;
         }
         .form-container {
-            background-color: rgba(34, 34, 34, 0.95);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-            width: 350px;
+            background: rgba(34, 34, 34, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            width: 320px;
+            margin: 10% auto;
             text-align: center;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            animation: fadeIn 1.5s ease-in-out;
-        }
-        h2, h3 {
-            color: #D4AF37;
-            margin-bottom: 15px;
+            color: #fff;
         }
         input, button {
             width: 100%;
-            padding: 12px;
-            margin-top: 12px;
-            border-radius: 6px;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
             border: none;
         }
         button {
-            background: linear-gradient(135deg, #D4AF37, #b7952c);
+            background-color: #D4AF37;
             color: #000;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
         }
         button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.5);
-        }
-        .error-msg {
-            color: #ff4d4d;
-            margin-top: 10px;
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -60%);
-            }
-            to {
-                opacity: 1;
-                transform: translate(-50%, -50%);
-            }
+            background-color: #b7952c;
         }
     </style>
 </head>
 <body>
-    <!-- Particle Background -->
-    <div id="particles-js"></div>
-
     <div class="form-container">
-        <h2>Welcome to MACX</h2>
-        <h3>User Sign Up / Login</h3>
+        <h2>MACX Crypto Wheel</h2>
 
         <!-- Sign Up Form -->
         <form id="signupForm">
@@ -92,42 +53,27 @@
             <input type="text" id="loginUsername" placeholder="Enter Username" required>
             <input type="password" id="loginPassword" placeholder="Enter Password" required>
             <button type="button" onclick="login()">Login</button>
+            <button type="button" onclick="forgotPassword()">Forgot Password</button>
+            <button type="button" onclick="deleteAccountRequest()">Delete Account</button>
         </form>
 
         <div id="error" class="error-msg"></div>
     </div>
 
-    <!-- Particle Animation Script -->
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        particlesJS("particles-js", {
-            particles: {
-                number: { value: 100, density: { enable: true, value_area: 800 } },
-                color: { value: "#D4AF37" },
-                shape: { type: "circle" },
-                opacity: { value: 0.6, random: true },
-                size: { value: 5, random: true },
-                move: { enable: true, speed: 3 }
-            }
-        });
-
         let users = JSON.parse(localStorage.getItem('users')) || [];
+        let requests = JSON.parse(localStorage.getItem('requests')) || [];
 
         function signUp() {
             const username = document.getElementById('signupUsername').value.trim();
             const password = document.getElementById('signupPassword').value.trim();
-            if (username === "" || password === "") {
-                showError("Please enter valid credentials.");
-                return;
-            }
-            const existingUser = users.find(user => user.username === username);
-            if (existingUser) {
-                showError("Username already taken. Choose another.");
+            if (users.find(user => user.username === username)) {
+                alert('Username already exists.');
                 return;
             }
             users.push({ username, password, points: 0 });
             localStorage.setItem('users', JSON.stringify(users));
-            alert("Sign Up Successful! You can now log in.");
+            alert('Sign Up Successful!');
         }
 
         function login() {
@@ -135,16 +81,27 @@
             const password = document.getElementById('loginPassword').value.trim();
             const user = users.find(user => user.username === username && user.password === password);
             if (!user) {
-                showError("Invalid username or password.");
+                alert('Invalid credentials');
                 return;
             }
             localStorage.setItem('loggedInUser', JSON.stringify(user));
-            alert("Login Successful! Redirecting...");
-            window.location.href = "game.html";
+            alert('Login Successful!');
         }
 
-        function showError(message) {
-            document.getElementById('error').textContent = message;
+        function forgotPassword() {
+            const username = prompt('Enter your username:');
+            const email = prompt('Enter your email:');
+            requests.push({ username, email, type: 'recover' });
+            localStorage.setItem('requests', JSON.stringify(requests));
+            alert('Recovery request sent. Action will be taken within 24 hours.');
+        }
+
+        function deleteAccountRequest() {
+            const username = prompt('Enter your username:');
+            const email = prompt('Enter your email:');
+            requests.push({ username, email, type: 'delete' });
+            localStorage.setItem('requests', JSON.stringify(requests));
+            alert('Delete request submitted.');
         }
     </script>
 </body>
