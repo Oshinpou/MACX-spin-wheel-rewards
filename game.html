@@ -20,6 +20,8 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      height: 100vh;
+      overflow: hidden;
     }
 
     #header {
@@ -28,15 +30,19 @@
       background-color: #222;
       display: flex;
       justify-content: space-between;
+      align-items: center;
       position: fixed;
       top: 0;
       left: 0;
     }
 
+    #header span {
+      color: #ffd700;
+      font-size: 18px;
+    }
+
     #game-container {
       margin-top: 80px;
-      max-width: 500px;
-      width: 100%;
       text-align: center;
     }
 
@@ -44,8 +50,6 @@
       position: relative;
       width: 300px;
       height: 300px;
-      border: 5px solid #fff;
-      border-radius: 50%;
       margin: 20px auto;
     }
 
@@ -53,6 +57,8 @@
       width: 100%;
       height: 100%;
       border-radius: 50%;
+      border: 5px solid #ffd700;
+      position: relative;
       transition: transform 3s ease-out;
     }
 
@@ -63,6 +69,30 @@
       background-color: #ffd700;
       transform-origin: 100% 100%;
       clip-path: polygon(100% 100%, 0 100%, 0 0);
+    }
+
+    .segment:nth-child(odd) {
+      background-color: #f4a460;
+    }
+
+    .segment span {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 14px;
+      color: #000;
+    }
+
+    #pointer {
+      width: 20px;
+      height: 30px;
+      background-color: red;
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
     }
 
     button {
@@ -79,6 +109,12 @@
     button:hover {
       background-color: #e6c200;
     }
+
+    #message {
+      margin-top: 10px;
+      font-size: 16px;
+      color: #ffd700;
+    }
   </style>
 </head>
 
@@ -90,15 +126,32 @@
 
   <div id="game-container">
     <div class="wheel-container">
+      <div id="pointer"></div>
       <div class="wheel" id="wheel">
-        <div class="segment" style="transform: rotate(0deg);">1</div>
-        <div class="segment" style="transform: rotate(45deg);">2</div>
-        <div class="segment" style="transform: rotate(90deg);">3</div>
-        <div class="segment" style="transform: rotate(135deg);">4</div>
-        <div class="segment" style="transform: rotate(180deg);">5</div>
-        <div class="segment" style="transform: rotate(225deg);">6</div>
-        <div class="segment" style="transform: rotate(270deg);">7</div>
-        <div class="segment" style="transform: rotate(315deg);">8</div>
+        <div class="segment" style="transform: rotate(0deg);">
+          <span>10 Points</span>
+        </div>
+        <div class="segment" style="transform: rotate(45deg);">
+          <span>20 Points</span>
+        </div>
+        <div class="segment" style="transform: rotate(90deg);">
+          <span>50 Points</span>
+        </div>
+        <div class="segment" style="transform: rotate(135deg);">
+          <span>100 Points</span>
+        </div>
+        <div class="segment" style="transform: rotate(180deg);">
+          <span>Lose All</span>
+        </div>
+        <div class="segment" style="transform: rotate(225deg);">
+          <span>5 Points</span>
+        </div>
+        <div class="segment" style="transform: rotate(270deg);">
+          <span>Spin Again</span>
+        </div>
+        <div class="segment" style="transform: rotate(315deg);">
+          <span>Jackpot</span>
+        </div>
       </div>
     </div>
 
@@ -106,27 +159,70 @@
     <button id="withdrawButton">Withdraw Points</button>
     <button onclick="location.href='faq.html'">FAQ / About</button>
     <button onclick="location.href='contact.html'">Help / Contact Us</button>
+
+    <div id="message"></div>
   </div>
 
   <script>
     const wheel = document.getElementById("wheel");
     const spinButton = document.getElementById("spinButton");
     const withdrawButton = document.getElementById("withdrawButton");
+    const pointsDisplay = document.getElementById("points");
+    const message = document.getElementById("message");
+
+    let points = 0;
     let spinning = false;
+    let segments = [
+      { label: "10 Points", value: 10 },
+      { label: "20 Points", value: 20 },
+      { label: "50 Points", value: 50 },
+      { label: "100 Points", value: 100 },
+      { label: "Lose All", value: -1 },
+      { label: "5 Points", value: 5 },
+      { label: "Spin Again", value: 0 },
+      { label: "Jackpot", value: 500 }
+    ];
 
     spinButton.addEventListener("click", () => {
       if (spinning) return;
       spinning = true;
-      const rotation = Math.floor(Math.random() * 3600) + 720;
+      const rotation = Math.floor(Math.random() * 3600) + 720; // Random spin rotation
       wheel.style.transform = `rotate(${rotation}deg)`;
+
       setTimeout(() => {
-        alert("You won points!");
+        const segmentIndex = getWinningSegment(rotation % 360);
+        handleResult(segmentIndex);
         spinning = false;
       }, 3000);
     });
 
+    function getWinningSegment(rotation) {
+      const segmentSize = 360 / segments.length;
+      const index = Math.floor(rotation / segmentSize);
+      return segments[index % segments.length];
+    }
+
+    function handleResult(segment) {
+      if (segment.label === "Lose All") {
+        points = 0;
+        message.innerText = "Oops! You lost all your points!";
+      } else if (segment.label === "Spin Again") {
+        message.innerText = "Lucky! Spin again!";
+      } else {
+        points += segment.value;
+        message.innerText = `You won ${segment.label}!`;
+      }
+      pointsDisplay.innerText = `Points: ${points}`;
+    }
+
     withdrawButton.addEventListener("click", () => {
-      window.location.href = "withdraw.html";
+      if (points >= 100) {
+        alert(`You successfully withdrew ${points} points!`);
+        points = 0;
+        pointsDisplay.innerText = "Points: 0";
+      } else {
+        alert("You need at least 100 points to withdraw.");
+      }
     });
   </script>
 </body>
