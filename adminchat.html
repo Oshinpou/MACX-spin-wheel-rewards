@@ -37,6 +37,19 @@
             margin: 5px 0;
         }
 
+        .user-box {
+            background: #1e1e1e;
+            border: 1px solid #444;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            text-align: left;
+        }
+
+        .user-box p {
+            margin: 5px 0;
+        }
+
         .message-input {
             width: calc(100% - 80px);
             padding: 10px;
@@ -58,6 +71,14 @@
         button:hover {
             background: #b7952c;
         }
+
+        .delete-btn {
+            background: #ff4d4d;
+        }
+
+        .delete-btn:hover {
+            background: #e60000;
+        }
     </style>
 </head>
 <body>
@@ -65,68 +86,112 @@
     <div class="container">
         <h2>Admin Panel - User Chats</h2>
 
-        <label for="userSelect">Select User Chat:</label>
-        <select id="userSelect" onchange="loadChat()">
-            <option value="">Select User</option>
-        </select>
-
-        <div class="chat-box" id="chatBox">
-            <p>💬 Select a user to view or manage chat...</p>
+        <div id="chatContainer">
+            <!-- Dynamic User Chats Load Here -->
         </div>
-
-        <input type="text" id="messageInput" class="message-input" placeholder="Type a reply..." />
-        <button onclick="sendReply()">Send Reply</button>
-        <button onclick="deleteChat()">Delete Chat</button>
     </div>
 
     <script>
-        // Load All User Chats
+        // Load All User Chats and Messages
         let allChats = {};
+        let allUsers = [];
+
         for (let key in localStorage) {
             if (key.startsWith('chat_')) {
-                allChats[key.replace('chat_', '')] = JSON.parse(localStorage.getItem(key));
+                let username = key.replace('chat_', '');
+                let userDetails = JSON.parse(localStorage.getItem('user_' + username)) || { points: 0 };
+                allChats[username] = {
+                    messages: JSON.parse(localStorage.getItem(key)) || [],
+                    points: userDetails.points
+                };
+                allUsers.push(username);
             }
         }
 
-        // Populate User Select
-        const userSelect = document.getElementById('userSelect');
-        for (let username in allChats) {
-            let option = document.createElement('option');
-            option.value = username;
-            option.innerText = username;
-            userSelect.appendChild(option);
-        }
+        // Load All Chats in Admin Panel
+        function loadChats() {
+            let chatContainer = document.getElementById('chatContainer');
+            chatContainer.innerHTML = '';
 
-        let selectedUser = '';
-        let chatData = [];
-
-        // Load Chat for Selected User
-        function loadChat() {
-            selectedUser = userSelect.value;
-            if (selectedUser === '') {
-                document.getElementById('chatBox').innerHTML = '<p>💬 Select a user to view or manage chat...</p>';
+            if (allUsers.length === 0) {
+                chatContainer.innerHTML = '<p>💬 No ongoing chats.</p>';
                 return;
             }
 
-            chatData = allChats[selectedUser] || [];
-            updateChatBox();
+            allUsers.forEach(username => {
+                let userChat = allChats[username];
+                let chatBoxHTML = `
+                    <div class="user-box">
+                        <p><strong>Username:</strong> ${username}</p>
+                        <p><strong>Points:</strong> ${userChat.points}</p>
+                        <div class="chat-box" id="chatBox_${username}">
+                            ${generateChatHTML(userChat.messages)}
+                        </div>
+                        <input type="text" id="replyInput_${username}" class="message-input" placeholder="Reply to ${username}..." />
+                        <button onclick="sendReply('${username}')">Reply</button>
+                        <button class="delete-btn" onclick="deleteChat('${username}')">Delete Chat</button>
+                        <button onclick="startNewChat('${username}')">Start New Chat</button>
+                    </div>
+                `;
+                chatContainer.innerHTML += chatBoxHTML;
+            });
         }
 
-        // Send Admin Reply
-        function sendReply() {
-            let message = document.getElementById('messageInput').value;
-            if (message.trim() === '' || selectedUser === '') {
-                alert('❗ Message or user not selected.');
+        // Generate Chat Messages for Each User
+        function generateChatHTML(messages) {
+            if (messages.length === 0) {
+                return '<p>💬 No messages yet.</p>';
+            }
+
+            return messages
+                .map(msg => {
+                    let senderStyle = msg.sender === 'user' ? 'color: #FFD700;' : 'color: #00FF00;';
+                    return `<p><strong style="${senderStyle}">${msg.sender === 'user' ? 'User' : 'Admin'}:</strong> ${msg.message} <small style="color: #888;">(${msg.timestamp})</small></p>`;
+                })
+                .join('');
+        }
+
+        // Send Admin Reply to User
+        function sendReply(username) {
+            let messageInput = document.getElementById('replyInput_' + username);
+            let message = messageInput.value;
+
+            if (message.trim() === '') {
+                alert('❗ Reply cannot be empty.');
                 return;
             }
 
-            let replyMessage = {
+            let newMessage = {
                 sender: 'admin',
                 message: message,
                 timestamp: new Date().toLocaleString()
             };
 
-            chatData.push(replyMessage);
-            localStorage.setItem('chat_' + selectedUser, JSON.stringify(chatData));
-            updateChatBox();
-            document.getElementById
+            allChats[username].messages.push(newMessage);
+            localStorage.setItem('chat_' + username, JSON.stringify(allChats[username].messages));
+            loadChats(); // Refresh chat after reply
+        }
+
+        // Delete Chat
+        function deleteChat(username) {
+            if (confirm(`❌ Are you sure you want to delete the chat with ${username}?`)) {
+                localStorage.removeItem('chat_' + username);
+                allUsers = allUsers.filter(user => user !== username);
+                loadChats();
+            }
+        }
+
+        // Start New Chat
+        function startNewChat(username) {
+            if (confirm(`⚡ Start a new chat with ${username}?`)) {
+                localStorage.removeItem('chat_' + username);
+                allChats[username] = { messages: [], points: allChats[username]?.points || 0 };
+                loadChats();
+            }
+        }
+
+        // Load Chats on Page Load
+        loadChats();
+    </script>
+</body>
+</html>
