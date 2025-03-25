@@ -6,8 +6,15 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #1a1a1a;
+            background: #1a1a1a;
+            overflow: hidden;
             font-family: Arial, sans-serif;
+        }
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
         }
         .form-container {
             background: rgba(34, 34, 34, 0.9);
@@ -33,9 +40,40 @@
         button:hover {
             background-color: #b7952c;
         }
+        .slider-container {
+            width: 90%;
+            margin: 20px auto;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .slider {
+            display: inline-block;
+            animation: slide 10s linear infinite;
+        }
+        .slider img {
+            width: 120px;
+            height: 120px;
+            margin: 5px;
+            border-radius: 10px;
+        }
+        @keyframes slide {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
     </style>
 </head>
 <body>
+    <canvas id="particleCanvas"></canvas>
+    
+    <div class="slider-container">
+        <div class="slider">
+            <img src="game1.jpg" alt="Game 1">
+            <img src="game2.jpg" alt="Game 2">
+            <img src="game3.jpg" alt="Game 3">
+            <img src="game4.jpg" alt="Game 4">
+        </div>
+    </div>
+
     <div class="form-container">
         <h2>MACX Crypto Wheel</h2>
 
@@ -61,6 +99,42 @@
     </div>
 
     <script>
+        // Background Particle Animation
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        for (let i = 0; i < 100; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 3,
+                dx: Math.random() - 0.5,
+                dy: Math.random() - 0.5
+            });
+        }
+
+        function drawParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#D4AF37';
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+
+                p.x += p.dx;
+                p.y += p.dy;
+
+                if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+            });
+            requestAnimationFrame(drawParticles);
+        }
+        drawParticles();
+
         let users = JSON.parse(localStorage.getItem('users')) || [];
         let requests = JSON.parse(localStorage.getItem('requests')) || [];
 
@@ -85,7 +159,8 @@
                 return;
             }
             localStorage.setItem('loggedInUser', JSON.stringify(user));
-            alert('Login Successful!');
+            alert('Login Successful! Redirecting...');
+            window.location.href = 'game.html';
         }
 
         function forgotPassword() {
