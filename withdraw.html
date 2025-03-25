@@ -100,7 +100,7 @@
             </select>
 
             <label for="pointsToWithdraw">Enter Points to Withdraw</label>
-            <input type="number" id="pointsToWithdraw" name="pointsToWithdraw" min="1000000" required>
+            <input type="number" id="pointsToWithdraw" name="pointsToWithdraw" min="100000" required>
 
             <label for="walletAddress">Enter Wallet Address</label>
             <input type="text" id="walletAddress" name="walletAddress" required>
@@ -122,10 +122,10 @@
 
         // Points Conversion Rates
         const conversionRates = {
-            USDT: 1000000, // 1 USDT = 1,000,000 points
-            BTC: 1000000,  // 1000 Sats BTC
+            USDT: 100000, // 1 USDT = 1,000,00 points
+            BTC: 100000,  // 1000 Sats BTC
             ETH: 100000,   // 10,000 ETH
-            MACX: 1000     // 1,000 MACX coins
+            MACX: 100000,     // 1,000 MACX coins
         };
 
         // Process Withdrawal
@@ -138,8 +138,8 @@
             let pointsToWithdraw = parseInt(document.getElementById('pointsToWithdraw').value);
             let walletAddress = document.getElementById('walletAddress').value;
 
-            if (pointsToWithdraw < 1000000) {
-                alert('❗ Minimum withdrawal is 1,000,000 points.');
+            if (pointsToWithdraw < 100000) {
+                alert('❗ Minimum withdrawal is 1,000,00 points.');
                 return;
             }
 
