@@ -120,7 +120,7 @@
 
 <body>
   <div id="header">
-    <span id="username">Username: Guest</span>
+    <span id="username">Username: Loading...</span>
     <span id="points">Points: 0</span>
   </div>
 
@@ -132,30 +132,31 @@
           <span>10 Points</span>
         </div>
         <div class="segment" style="transform: rotate(45deg);">
-          <span>20 Points</span>
+          <span>12 Points</span>
         </div>
         <div class="segment" style="transform: rotate(90deg);">
-          <span>50 Points</span>
+          <span>15 Points</span>
         </div>
         <div class="segment" style="transform: rotate(135deg);">
-          <span>100 Points</span>
+          <span>18 Points</span>
         </div>
         <div class="segment" style="transform: rotate(180deg);">
-          <span>Lose All</span>
+          <span>20 Points</span>
         </div>
         <div class="segment" style="transform: rotate(225deg);">
-          <span>5 Points</span>
+          <span>14 Points</span>
         </div>
         <div class="segment" style="transform: rotate(270deg);">
-          <span>Spin Again</span>
+          <span>16 Points</span>
         </div>
         <div class="segment" style="transform: rotate(315deg);">
-          <span>Jackpot</span>
+          <span>12 Points</span>
         </div>
       </div>
     </div>
 
     <button id="spinButton">Spin the Wheel!</button>
+    <button id="watchAdButton">Watch Ad to Earn Points</button>
     <button id="withdrawButton">Withdraw Points</button>
     <button onclick="location.href='faq.html'">FAQ / About</button>
     <button onclick="location.href='contact.html'">Help / Contact Us</button>
@@ -164,25 +165,33 @@
   </div>
 
   <script>
+    // Get stored points and username from CRM or session
+    let username = localStorage.getItem("username") || "Guest";
+    let points = parseInt(localStorage.getItem("points")) || 0;
     const wheel = document.getElementById("wheel");
     const spinButton = document.getElementById("spinButton");
+    const watchAdButton = document.getElementById("watchAdButton");
     const withdrawButton = document.getElementById("withdrawButton");
     const pointsDisplay = document.getElementById("points");
     const message = document.getElementById("message");
 
-    let points = 0;
+    // Set initial values on page load
+    document.getElementById("username").innerText = `Username: ${username}`;
+    pointsDisplay.innerText = `Points: ${points}`;
+
     let spinning = false;
     let segments = [
       { label: "10 Points", value: 10 },
+      { label: "12 Points", value: 12 },
+      { label: "15 Points", value: 15 },
+      { label: "18 Points", value: 18 },
       { label: "20 Points", value: 20 },
-      { label: "50 Points", value: 50 },
-      { label: "100 Points", value: 100 },
-      { label: "Lose All", value: -1 },
-      { label: "5 Points", value: 5 },
-      { label: "Spin Again", value: 0 },
-      { label: "Jackpot", value: 500 }
+      { label: "14 Points", value: 14 },
+      { label: "16 Points", value: 16 },
+      { label: "12 Points", value: 12 }
     ];
 
+    // Spin wheel and determine the result
     spinButton.addEventListener("click", () => {
       if (spinning) return;
       spinning = true;
@@ -203,25 +212,35 @@
     }
 
     function handleResult(segment) {
-      if (segment.label === "Lose All") {
-        points = 0;
-        message.innerText = "Oops! You lost all your points!";
-      } else if (segment.label === "Spin Again") {
-        message.innerText = "Lucky! Spin again!";
-      } else {
-        points += segment.value;
-        message.innerText = `You won ${segment.label}!`;
-      }
+      points += segment.value;
+      message.innerText = `🎉 You won ${segment.label}!`;
       pointsDisplay.innerText = `Points: ${points}`;
+      localStorage.setItem("points", points); // Store updated points
     }
 
+    // Watch Ad Button - Redirect to watch-ad.html and return to game.html
+    watchAdButton.addEventListener("click", () => {
+      localStorage.setItem("returnFromAd", "true"); // Set flag for return
+      window.location.href = "watch-ad.html";
+    });
+
+    // Check if returning from ad and give extra points
+    if (localStorage.getItem("returnFromAd") === "true") {
+      points += 5; // Bonus points for watching ad
+      message.innerText = "🎥 You earned 5 extra points after watching the ad!";
+      pointsDisplay.innerText = `Points: ${points}`;
+      localStorage.removeItem("returnFromAd"); // Clear flag after rewarding
+    }
+
+    // Withdraw Button - Only allow if points >= 100
     withdrawButton.addEventListener("click", () => {
       if (points >= 100) {
-        alert(`You successfully withdrew ${points} points!`);
+        alert(`✅ You successfully withdrew ${points} points!`);
         points = 0;
         pointsDisplay.innerText = "Points: 0";
+        localStorage.setItem("points", points);
       } else {
-        alert("You need at least 100 points to withdraw.");
+        alert("⚠️ You need at least 100 points to withdraw.");
       }
     });
   </script>
