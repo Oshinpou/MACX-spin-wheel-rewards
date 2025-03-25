@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MACX - Admin Requests</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0d0d0d;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            text-align: center;
+        }
+
+        .container {
+            margin: 50px auto;
+            width: 80%;
+        }
+
+        h2 {
+            color: #FFD700;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #444;
+        }
+
+        th {
+            background: #FFD700;
+            color: #000;
+        }
+
+        tr:nth-child(even) {
+            background: #333;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Admin Panel - Pending Withdrawal Requests</h2>
+
+        <table id="requestsTable">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Crypto</th>
+                    <th>Network</th>
+                    <th>Points</th>
+                    <th>Amount</th>
+                    <th>Wallet Address</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="requestsBody"></tbody>
+        </table>
+    </div>
+
+    <script>
+        // Load withdrawal requests
+        let adminRequests = JSON.parse(localStorage.getItem('adminRequests')) || [];
+
+        function loadRequests() {
+            const requestsBody = document.getElementById('requestsBody');
+            requestsBody.innerHTML = '';
+
+            adminRequests.forEach((request, index) => {
+                requestsBody.innerHTML += `
+                    <tr>
+                        <td>${request.username}</td>
+                        <td>${request.email}</td>
+                        <td>${request.crypto}</td>
+                        <td>${request.network}</td>
+                        <td>${request.points}</td>
+                        <td>${request.amount}</td>
+                        <td>${request.walletAddress}</td>
+                        <td>${request.status}</td>
+                        <td>
+                            ${request.status === 'Pending' ? `<button onclick="processRequest(${index})">Mark as Processed</button>` : '✅ Processed'}
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Mark Request as Processed
+        function processRequest(index) {
+            adminRequests[index].status = 'Processed';
+            localStorage.setItem('adminRequests', JSON.stringify(adminRequests));
+            loadRequests();
+        }
+
+        // Load Requests on Page Load
+        window.onload = loadRequests;
+    </script>
+</body>
+</html>
