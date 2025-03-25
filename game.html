@@ -137,12 +137,19 @@
         <h3>Your Points: <span id="points">0</span></h3>
 
         <!-- Spin Wheel Section -->
-        <canvas id="wheelCanvas" width="320" height="320"></canvas>
-        <button onclick="spinWheel()">🎯 Spin the Wheel</button>
+<div class="wheel-container">
+    <canvas id="wheelCanvas" width="320" height="320"></canvas>
+    <button onclick="spinWheel()">🎯 Spin the Wheel</button>
 
-        <p id="adStatus"></p>
+    <p id="adStatus"></p> <!-- Ad Status Display After Spin -->
 
-        <!-- Navigation Section -->
+    <!-- Ad Script to Show on Button Click -->
+    <script async="async" data-cfasync="false" src="//pl26215910.effectiveratecpm.com/302fcc48778dbb27b65e7e5842acaba9/invoke.js"></script>
+    <div id="container-302fcc48778dbb27b65e7e5842acaba9" style="display: none;"></div>
+</div>
+
+
+         <!-- Navigation Section -->
         <div class="nav-container">
             <button class="nav-btn" onclick="window.location.href='withdraw.html'">Withdraw</button>
             <button class="nav-btn" onclick="window.location.href='faq.html'">FAQ</button>
@@ -152,114 +159,148 @@
         </div>
     </div>
 
-    <script>
-        // Load logged-in user data
-        let loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
-        if (!loggedInUser) {
-            alert('❌ No user logged in. Redirecting to login page.');
-            window.location.href = 'login.html';
-        } else {
-            document.getElementById('username').innerText = loggedInUser.username;
-            document.getElementById('points').innerText = loggedInUser.points;
+
+        <script>
+    // Load logged-in user data
+    let loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    if (!loggedInUser) {
+        alert('❌ No user logged in. Redirecting to login page.');
+        window.location.href = 'login.html';
+    } else {
+        document.getElementById('username').innerText = loggedInUser.username;
+        document.getElementById('points').innerText = loggedInUser.points;
+    }
+
+    // Wheel Setup
+    const wheelCanvas = document.getElementById('wheelCanvas');
+    const wheelCtx = wheelCanvas.getContext('2d');
+    const wheelSegments = [10, 20, 30, 40, 50, 100, 200, 500];
+    const wheelColors = ['#FFD700', '#FFA500', '#FF6347', '#40E0D0', '#8A2BE2', '#FF69B4', '#1E90FF', '#32CD32'];
+    const segmentAngle = 2 * Math.PI / wheelSegments.length;
+    let isSpinning = false;
+    let spinPoints = 0;
+
+    // Draw Wheel
+    function drawWheel() {
+        for (let i = 0; i < wheelSegments.length; i++) {
+            wheelCtx.beginPath();
+            wheelCtx.fillStyle = wheelColors[i];
+            wheelCtx.moveTo(160, 160);
+            wheelCtx.arc(160, 160, 160, i * segmentAngle, (i + 1) * segmentAngle);
+            wheelCtx.lineTo(160, 160);
+            wheelCtx.fill();
+
+            wheelCtx.fillStyle = '#000';
+            wheelCtx.font = '16px Arial';
+            wheelCtx.fillText(
+                wheelSegments[i] + ' pts',
+                140 + 80 * Math.cos(i * segmentAngle + segmentAngle / 2),
+                150 + 80 * Math.sin(i * segmentAngle + segmentAngle / 2)
+            );
         }
+    }
+    drawWheel();
 
-        // Wheel Setup
-        const wheelCanvas = document.getElementById('wheelCanvas');
-        const wheelCtx = wheelCanvas.getContext('2d');
-        const wheelSegments = [10, 20, 30, 40, 50, 100, 200, 500];
-        const wheelColors = ['#FFD700', '#FFA500', '#FF6347', '#40E0D0', '#8A2BE2', '#FF69B4', '#1E90FF', '#32CD32'];
-        const segmentAngle = 2 * Math.PI / wheelSegments.length;
-        let isSpinning = false;
-        let spinPoints = 0;
+    // Spin Wheel Logic
+    function spinWheel() {
+        if (isSpinning) return;
+        isSpinning = true;
 
-        // Draw Wheel
-        function drawWheel() {
-            for (let i = 0; i < wheelSegments.length; i++) {
-                wheelCtx.beginPath();
-                wheelCtx.fillStyle = wheelColors[i];
-                wheelCtx.moveTo(160, 160);
-                wheelCtx.arc(160, 160, 160, i * segmentAngle, (i + 1) * segmentAngle);
-                wheelCtx.lineTo(160, 160);
-                wheelCtx.fill();
+        let randomAngle = Math.random() * 2 * Math.PI + 10 * 2 * Math.PI;
+        let spinDuration = 3000;
+        let startTime = null;
 
-                wheelCtx.fillStyle = '#000';
-                wheelCtx.font = '16px Arial';
-                wheelCtx.fillText(wheelSegments[i] + ' pts', 140 + 80 * Math.cos(i * segmentAngle + segmentAngle / 2), 150 + 80 * Math.sin(i * segmentAngle + segmentAngle / 2));
-            }
-        }
-        drawWheel();
+        function animateSpin(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const elapsedTime = timestamp - startTime;
 
-        // Spin Wheel Logic
-        function spinWheel() {
-            if (isSpinning) return;
-            isSpinning = true;
+            const progress = Math.min(elapsedTime / spinDuration, 1);
+            const currentAngle = progress * randomAngle;
 
-            let randomAngle = Math.random() * 2 * Math.PI + 10 * 2 * Math.PI;
-            let spinDuration = 3000;
-            let startTime = null;
+            wheelCanvas.style.transform = `rotate(${currentAngle}rad)`;
 
-            function animateSpin(timestamp) {
-                if (!startTime) startTime = timestamp;
-                const elapsedTime = timestamp - startTime;
-
-                const progress = Math.min(elapsedTime / spinDuration, 1);
-                const currentAngle = progress * randomAngle;
-
-                wheelCanvas.style.transform = `rotate(${currentAngle}rad)`;
-
-                if (progress < 1) {
-                    requestAnimationFrame(animateSpin);
-                } else {
-                    const finalSegmentIndex = Math.floor(((randomAngle % (2 * Math.PI)) / segmentAngle)) % wheelSegments.length;
-                    spinPoints = wheelSegments[finalSegmentIndex];
-                    askToWatchAd();
-                    isSpinning = false;
-                }
-            }
-            requestAnimationFrame(animateSpin);
-        }
-
-        // Prompt to Watch Ad for Points
-        function askToWatchAd() {
-            const adConfirmation = confirm(`🎥 Watch an ad to collect ${spinPoints} points?`);
-            if (adConfirmation) {
-                watchAdToCollectPoints(spinPoints);
+            if (progress < 1) {
+                requestAnimationFrame(animateSpin);
             } else {
-                spinPoints = 0;
-                alert('❌ You skipped the ad. Points not collected.');
+                const finalSegmentIndex = Math.floor(((randomAngle % (2 * Math.PI)) / segmentAngle)) % wheelSegments.length;
+                spinPoints = wheelSegments[finalSegmentIndex];
+                askToWatchAd();
+                isSpinning = false;
             }
         }
+        requestAnimationFrame(animateSpin);
+    }
 
-        // Watch Ad to Collect Points
-        function watchAdToCollectPoints(points) {
-            document.getElementById('adStatus').innerText = '🎥 Watching ad...';
-            setTimeout(() => {
-                document.getElementById('adStatus').innerText = '✅ Ad watched! Points added.';
-                updatePoints(points);
-            }, 5000); // Simulate 5-second ad
+    // Prompt to Watch Ad for Points
+    function askToWatchAd() {
+        const adConfirmation = confirm(`🎥 Watch an ad to collect ${spinPoints} points?`);
+        if (adConfirmation) {
+            watchAdToCollectPoints(spinPoints);
+        } else {
+            spinPoints = 0;
+            alert('❌ You skipped the ad. Points not collected.');
+        }
+    }
+
+    // Watch Ad to Collect Points
+    function watchAdToCollectPoints(points) {
+        document.getElementById('adStatus').innerText = '🎥 Watching ad...';
+        setTimeout(() => {
+            document.getElementById('adStatus').innerText = '✅ Ad watched! Points added.';
+            updatePoints(points);
+        }, 5000); // Simulate 5-second ad
+    }
+
+    // Update Points after Watching Ad
+    function updatePoints(points) {
+        loggedInUser.points += points;
+        localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        let userIndex = users.findIndex(user => user.username === loggedInUser.username);
+        if (userIndex !== -1) {
+            users[userIndex].points = loggedInUser.points;
+            localStorage.setItem('users', JSON.stringify(users));
         }
 
-        // Update Points after Watching Ad
-        function updatePoints(points) {
-            loggedInUser.points += points;
-            localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+        document.getElementById('points').innerText = loggedInUser.points;
+        alert(`🎉 You collected ${points} points!`);
+    }
 
-            let users = JSON.parse(localStorage.getItem('users')) || [];
-            let userIndex = users.findIndex(user => user.username === loggedInUser.username);
-            if (userIndex !== -1) {
-                users[userIndex].points = loggedInUser.points;
-                localStorage.setItem('users', JSON.stringify(users));
-            }
+    // Logout Function
+    function logout() {
+        localStorage.removeItem('loggedInUser');
+        window.location.href = 'login.html';
+    }
 
-            document.getElementById('points').innerText = loggedInUser.points;
-            alert(`🎉 You collected ${points} points!`);
+    // Show Ad Before Spin and Unlock
+    function showAdBeforeSpin() {
+        document.getElementById('adStatus').innerHTML = "🎥 Showing ad... Please wait.";
+
+        // Show ad container
+        document.getElementById('container-302fcc48778dbb27b65e7e5842acaba9').style.display = "block";
+
+        // Hide ad after 15 seconds and unlock spin
+        setTimeout(() => {
+            document.getElementById('container-302fcc48778dbb27b65e7e5842acaba9').style.display = "none";
+            document.getElementById('adStatus').innerHTML = "✅ Ad watched! You can now spin.";
+            
+            // Mark ad as watched
+            localStorage.setItem("adWatched", "true");
+        }, 15000);
+    }
+
+    // Unlock Spin Only After Watching Ad
+    function checkAdAndSpin() {
+        if (!localStorage.getItem("adWatched")) {
+            document.getElementById("adStatus").innerHTML = "🎥 Watch an ad to unlock your next spin!";
+            showAdBeforeSpin();
+        } else {
+            spinWheel();
         }
+    }
 
-        // Logout Function
-        function logout() {
-            localStorage.removeItem('loggedInUser');
-            window.location.href = 'login.html';
-        }
-    </script>
+                
+     </script>
 </body>
 </html>
