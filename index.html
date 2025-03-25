@@ -8,14 +8,11 @@
             margin: 0;
             padding: 0;
             overflow-x: hidden;
+            color: gold;
         }
         .container {
             text-align: center;
             padding: 20px;
-            color: gold;
-            text-shadow: 0 0 20px gold, 0 0 40px #ffdd00;
-            font-size: 18px;
-            font-weight: bold;
         }
         header {
             padding: 20px;
@@ -23,10 +20,10 @@
             box-shadow: 0 4px 12px rgba(255, 215, 0, 0.6);
             border-bottom: 2px solid gold;
         }
-        h1, p {
-            margin: 10px 0;
-            font-size: 24px;
-            font-weight: bold;
+        h1 {
+            margin: 0;
+            font-size: 40px;
+            text-shadow: 0 0 20px gold, 0 0 40px #ffdd00;
         }
         .slider-container {
             width: 100%;
@@ -41,22 +38,38 @@
         .card {
             width: 8.33%;
             background: linear-gradient(135deg, #ffd700, #ffb347);
-            color: #000;
             padding: 12px;
             margin: 5px;
-            box-shadow: 2px 2px 15px rgba(255,215,0,0.8);
             border-radius: 10px;
+            box-shadow: 2px 2px 15px rgba(255, 215, 0, 0.8);
         }
         .wheel-container {
             margin: 20px auto;
             width: 300px;
             height: 300px;
-            position: relative;
         }
         canvas {
             border: 5px solid gold;
             border-radius: 50%;
-            box-shadow: 0 10px 25px rgba(255,215,0,0.8);
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.8);
+        }
+        .features-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .feature {
+            padding: 15px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ffcc00, #ff6699);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.6);
+            animation: morph 6s infinite alternate;
+        }
+        @keyframes morph {
+            0% { border-radius: 10px; }
+            50% { border-radius: 30px; }
+            100% { border-radius: 10px; }
         }
         .auth-section button {
             padding: 12px 25px;
@@ -65,39 +78,36 @@
             color: #fff;
             border: none;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(255,215,0,0.6);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.6);
             cursor: pointer;
         }
         .auth-section button:hover {
             background-color: #ffdd57;
         }
-        .features {
-            margin-top: 20px;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-        }
-        .features p {
-            font-size: 16px;
-            margin: 8px 0;
-        }
         @keyframes slide {
             0% { transform: translateX(0); }
             100% { transform: translateX(-100%); }
+        }
+        footer {
+            background: #1c1c1c;
+            color: gold;
+            padding: 20px;
+            text-align: center;
+            border-top: 2px solid gold;
+            box-shadow: 0 -4px 12px rgba(255, 215, 0, 0.6);
         }
         .ads-container {
             margin-top: 30px;
             padding: 20px;
             background: #1c1c1c;
             border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(255,215,0,0.6);
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Welcome to MACX Crypto Wheel</h1>
+            <h1>MACX Crypto Wheel</h1>
             <p>Earn cryptocurrencies by spinning and exploring multiple blockchain networks.</p>
         </header>
 
@@ -125,31 +135,22 @@
         </div>
 
         <!-- Feature Highlights -->
-        <div class="features">
-            <p>🎰 Spin and Earn Multiple Cryptos</p>
-            <p>💸 Fast Withdrawals</p>
-            <p>🎯 Earn Bitcoin, Ethereum & More</p>
-            <p>⚡️ Secure Transactions</p>
-            <p>🔐 Blockchain Transparency</p>
-            <p>📈 Real-time Crypto Prices</p>
-            <p>📊 Track Earnings Easily</p>
-            <p>💰 Passive Income with Referrals</p>
-            <p>🌐 Access from Anywhere</p>
-            <p>🔔 Instant Notifications</p>
-            <p>🏆 Exclusive Bonus Rewards</p>
-            <p>🔄 Daily Spin Limits</p>
-            <p>⏱️ Time-based Crypto Bonuses</p>
-            <p>🎁 Invite Friends to Earn More</p>
-            <p>🚀 High Reward Potential</p>
-            <p>💎 Multiple Blockchain Networks Support</p>
-            <p>🌟 VIP Memberships for Higher Rewards</p>
-            <p>👥 User Ranking System</p>
-            <p>📚 Educational Resources on Crypto</p>
-            <p>📢 Daily Promotions and Bonuses</p>
-            <p>🤑 Seasonal Offers and Airdrops</p>
-            <p>🏅 Crypto Earning Challenges</p>
-            <p>🔗 Multi-wallet Integration Support</p>
-            <p>📲 Mobile App with Notifications</p>
+        <div class="features-container">
+            <div class="feature">🎰 Spin and Earn Multiple Cryptos</div>
+            <div class="feature">💸 Fast Withdrawals</div>
+            <div class="feature">🎯 Earn Bitcoin, Ethereum & More</div>
+            <div class="feature">⚡️ Secure Transactions</div>
+            <div class="feature">🔐 Blockchain Transparency</div>
+            <div class="feature">📈 Real-time Crypto Prices</div>
+            <div class="feature">📊 Track Earnings Easily</div>
+            <div class="feature">💰 Passive Income with Referrals</div>
+            <div class="feature">🌐 Access from Anywhere</div>
+            <div class="feature">🔔 Instant Notifications</div>
+            <div class="feature">🏆 Exclusive Bonus Rewards</div>
+            <div class="feature">🔄 Daily Spin Limits</div>
+            <div class="feature">⏱️ Time-based Crypto Bonuses</div>
+            <div class="feature">🎁 Invite Friends to Earn More</div>
+            <div class="feature">🚀 High Reward Potential</div>
         </div>
 
         <!-- Advertisement Section -->
@@ -158,6 +159,11 @@
             <p>Increase your earnings by watching short ads and boosting your crypto balance.</p>
         </div>
     </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 MACX Crypto Wheel. All rights reserved. | Powered by Blockchain Technology</p>
+    </footer>
 
     <script>
         // Wheel Drawing with Stripes
