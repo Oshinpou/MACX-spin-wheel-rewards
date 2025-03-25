@@ -150,18 +150,24 @@
             alert('Sign Up Successful!');
         }
 
-        function login() {
-            const username = document.getElementById('loginUsername').value.trim();
-            const password = document.getElementById('loginPassword').value.trim();
-            const user = users.find(user => user.username === username && user.password === password);
-            if (!user) {
-                alert('Invalid credentials');
-                return;
-            }
-            localStorage.setItem('loggedInUser', JSON.stringify(user));
-            alert('Login Successful! Redirecting...');
-            window.location.href = 'game.html';
-        }
+        
+  function login() {
+    const username = document.getElementById("username").value.trim();
+    if (username === "") {
+      document.getElementById("error").innerText = "⚠️ Username cannot be empty!";
+      return;
+    }
+
+    // Store username and points on successful login
+    localStorage.setItem("username", username);
+    if (!localStorage.getItem(`points_${username}`)) {
+      localStorage.setItem(`points_${username}`, "0"); // Initialize points to 0 for new user
+    }
+
+    // Redirect to game.html after login
+    window.location.href = "game.html";
+  }
+        
 
         function forgotPassword() {
             const username = prompt('Enter your username:');
