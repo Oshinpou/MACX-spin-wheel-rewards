@@ -1,198 +1,120 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Spin & Earn - Home</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
-<style>
-    /* Global Styles */
-body {
-    margin: 0;
-    font-family: Algerian, cursive;
-    background-color: #000;
-    overflow: auto;
-}
-
-/* Homepage Container */
-.homepage-container {
-    text-align: center;
-    margin-top: 10%;
-}
-
-/* Animated Gold Text */
-.animated-text {
-    font-weight: bold;
-    color: gold;
-    text-shadow: 0 0 20px #ff9900;
-    font-size: 48px;
-    animation: text-glow 1.5s infinite alternate;
-}
-
-@keyframes text-glow {
-    0% {
-        text-shadow: 0 0 10px gold;
-    }
-    100% {
-        text-shadow: 0 0 30px gold, 0 0 40px #ff9900;
-    }
-}
-
-/* Button Styles */
-.btn {
-    background-color: gold;
-    color: #000;
-    padding: 12px 24px;
-    text-decoration: none;
-    font-size: 18px;
-    border-radius: 8px;
-    box-shadow: 0 0 20px #ff9900;
-    transition: transform 0.3s ease-in-out;
-}
-
-.btn:hover {
-    transform: scale(1.1);
-}
-
-/* Wheel of Fortune Container */
-.wheel-container {
-    position: relative;
-    margin: 50px auto;
-    width: 600px;
-    height: 600px;
-    perspective: 1000px;
-}
-
-/* Wheel and Rotation Animation */
-.wheel {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    transform-style: preserve-3d;
-    animation: spin 10s infinite linear;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotateY(0deg) rotateX(0deg);
-    }
-    100% {
-        transform: rotateY(360deg) rotateX(360deg);
-    }
-}
-
-/* Wheel Segments - 10 Stripes with Different Colors */
-.segment {
-    width: 100%;
-    height: 50%;
-    position: absolute;
-    clip-path: polygon(50% 50%, 100% 0, 100% 100%);
-    transform-origin: 50% 100%;
-}
-
-/* Vibrant Color Segments */
-.segment:nth-child(1) {
-    background: #FF0000;
-    transform: rotate(0deg);
-}
-.segment:nth-child(2) {
-    background: #FF7F00;
-    transform: rotate(36deg);
-}
-.segment:nth-child(3) {
-    background: #FFFF00;
-    transform: rotate(72deg);
-}
-.segment:nth-child(4) {
-    background: #7FFF00;
-    transform: rotate(108deg);
-}
-.segment:nth-child(5) {
-    background: #00FF00;
-    transform: rotate(144deg);
-}
-.segment:nth-child(6) {
-    background: #00FF7F;
-    transform: rotate(180deg);
-}
-.segment:nth-child(7) {
-    background: #00FFFF;
-    transform: rotate(216deg);
-}
-.segment:nth-child(8) {
-    background: #007FFF;
-    transform: rotate(252deg);
-}
-.segment:nth-child(9) {
-    background: #0000FF;
-    transform: rotate(288deg);
-}
-.segment:nth-child(10) {
-    background: #7F00FF;
-    transform: rotate(324deg);
-}
-
-/* Center Button for Wheel */
-.center {
-    width: 60px;
-    height: 60px;
-    background: gold;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -30px;
-    margin-left: -30px;
-    border-radius: 50%;
-    border: 5px solid #ff9900;
-    box-shadow: 0 0 20px #ff9900;
-}
-</style>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+        header {
+            margin-bottom: 20px;
+        }
+        .slider-container {
+            width: 100%;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .slider {
+            display: flex;
+            width: 600%;
+            animation: slide 10s linear infinite;
+        }
+        .card {
+            width: 16.66%;
+            background: #4CAF50;
+            color: white;
+            padding: 10px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+        }
+        .wheel-container {
+            margin: 20px auto;
+            width: 300px;
+            height: 300px;
+        }
+        .auth-section button {
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .features p {
+            margin-top: 10px;
+        }
+        @keyframes slide {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-100%); }
+        }
+    </style>
 </head>
 <body>
-    <div class="homepage-container">
-       <h1 class="animated-text">$$MACX$$</h1>
-        <h1 class="animated-text">Welcome to Spin & Earn!</h1>
-        <a href="login.html" class="btn">Sign Up / Login</a>
+    <div class="container">
+        <header>
+            <h1>Welcome to MACX Crypto Wheel</h1>
+            <p>Spin and earn top cryptocurrencies across multiple networks.</p>
+        </header>
+
+        <!-- Crypto Info Cards Slider -->
+        <div class="slider-container">
+            <div class="slider">
+                <div class="card">Earn Bitcoin on BTC Network</div>
+                <div class="card">Earn Ethereum on ETH Network</div>
+                <div class="card">Earn USDT on Tron Network</div>
+                <div class="card">Earn TON on TON Network</div>
+                <div class="card">Earn Solana on SOL Network</div>
+                <div class="card">Earn BNB on BSC Network</div>
+            </div>
+        </div>
+
+        <!-- Wheel Section -->
+        <div class="wheel-container">
+            <canvas id="wheel" width="300" height="300"></canvas>
+        </div>
+
+        <!-- Login/Signup Section -->
+        <div class="auth-section">
+            <button onclick="location.href='login.html'">Login</button>
+            <button onclick="location.href='signup.html'">Sign Up</button>
+        </div>
+
+        <!-- Feature Highlights -->
+        <div class="features">
+            <p>💸 Easy withdrawals</p>
+            <p>🎰 Multiple crypto options</p>
+            <p>⚡️ Instant point redemption</p>
+        </div>
     </div>
-<br>
 
-<!-- Wheel of Fortune Container -->
-<div class="wheel-container">
-    <div class="wheel" id="wheel">
-        <!-- 10 Segments of Wheel with Different Colors and Points -->
-        <div class="segment" data-points="10000"></div>
-        <div class="segment" data-points="20000"></div>
-        <div class="segment" data-points="30000"></div>
-        <div class="segment" data-points="40000"></div>
-        <div class="segment" data-points="50000"></div>
-        <div class="segment" data-points="60000"></div>
-        <div class="segment" data-points="70000"></div>
-        <div class="segment" data-points="80000"></div>
-        <div class="segment" data-points="90000"></div>
-        <div class="segment" data-points="100000"></div>
-    </div>
-    <div class="center"></div>
-</div>
+    <script>
+        // Wheel Rotation
+        let canvas = document.getElementById('wheel');
+        let ctx = canvas.getContext('2d');
+        let angle = 0;
 
-<h1 class="animated-text">Introducing MACX Spin Wheel – Your Gateway to Crypto Riches!
+        function drawWheel() {
+            ctx.clearRect(0, 0, 300, 300);
+            ctx.beginPath();
+            ctx.arc(150, 150, 140, 0, 2 * Math.PI);
+            ctx.fillStyle = "#FFA500";
+            ctx.fill();
+            ctx.stroke();
+        }
 
-MACX Spin Wheel is an innovative and thrilling crypto earning platform that transforms your time and effort into valuable digital assets. Designed to offer excitement and rewards, MACX Spin Wheel is a gamified way to accumulate cryptocurrencies like Bitcoin (BTC), MACX tokens, USDT, and more! Whether you are a crypto enthusiast or someone looking for an exciting way to generate passive income, MACX Spin Wheel provides a unique and secure opportunity to win big while having fun.
+        function rotateWheel() {
+            angle += 0.01;
+            canvas.style.transform = `rotate(${angle}rad)`;
+            requestAnimationFrame(rotateWheel);
+        }
 
-How It Works:
-
-The concept is simple but rewarding. Users spin a vibrant, 3D animated, multi-colored wheel, segmented with different crypto rewards ranging from 10,000 to 100,000 points. Each spin brings a chance to win attractive crypto prizes. After accumulating points, users can seamlessly convert them into BTC, MACX, USDT, or other supported tokens. The platform is designed to ensure that the more you engage, the more you earn, making it an addictive yet profitable experience.
-
-Earn Crypto by Watching Ads
-
-To make the experience even more engaging, MACX Spin Wheel introduces a ‘Watch Ads to Earn’ feature. Users can watch targeted ads, and in return, they receive extra spins or points that significantly increase their chances of winning higher crypto rewards. Every watched ad contributes to your success by allowing you to spin again and multiply your earnings. With this model, MACX Spin Wheel not only rewards players but also creates a win-win ecosystem where advertisers benefit from targeted audiences and users earn valuable cryptocurrencies.
-
-Sign Up, Play, and Win
-
-Getting started is quick and easy. Sign up on the platform, log in using your credentials, and get ready to spin and win! The intuitive dashboard tracks all your earnings, spins, and withdrawals in real time, giving you full control over your crypto journey. Every time you log in, your username appears at the top of the page, adding a personalized touch and allowing you to keep track of your rewards effortlessly.
-
-Seamless Withdrawals and Crypto Rewards
-
-MACX Spin Wheel ensures smooth and hassle-free withdrawals. Once users reach the minimum withdrawal limit, they can convert their accumulated points into crypto and withdraw them directly to their wallets. The platform is built on a highly secure infrastructure, ensuring that all transactions are processed quickly and securely. Moreover, MACX offers 1% of its ad revenue as user rewards, meaning the more ads watched, the bigger the community grows, and the higher the payouts!
-
-</h1>
-
+        drawWheel();
+        rotateWheel();
+    </script>
 </body>
 </html>
