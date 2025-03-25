@@ -242,14 +242,21 @@
         }
     }
 
-    // Watch Ad to Collect Points
-    function watchAdToCollectPoints(points) {
-        document.getElementById('adStatus').innerText = '🎥 Watching ad...';
-        setTimeout(() => {
-            document.getElementById('adStatus').innerText = '✅ Ad watched! Points added.';
-            updatePoints(points);
-        }, 5000); // Simulate 5-second ad
-    }
+// Watch Ad to Collect Points
+function watchAdToCollectPoints(points) {
+    // Show Ad Container
+    document.getElementById('container-302fcc48778dbb27b65e7e5842acaba9').style.display = "block";
+    
+    // Update Ad Status
+    document.getElementById('adStatus').innerText = '🎥 Watching ad...';
+    
+    // Hide Ad after 15 seconds
+    setTimeout(() => {
+        document.getElementById('container-302fcc48778dbb27b65e7e5842acaba9').style.display = "none";
+        document.getElementById('adStatus').innerText = '✅ Ad watched! Points added.';
+        updatePoints(points);
+    }, 15000); // Simulate 15-second ad (adjust if needed)
+}
 
     // Update Points after Watching Ad
     function updatePoints(points) {
@@ -300,7 +307,14 @@
         }
     }
 
-                
+     function adBlockDetected() {
+    const adContainer = document.getElementById('container-302fcc48778dbb27b65e7e5842acaba9');
+    if (!adContainer || adContainer.innerHTML.length === 0) {
+        alert("⚠️ Ad Blocker Detected! Please disable your ad blocker to continue.");
+    }
+}
+
+setTimeout(adBlockDetected, 5000);           
      </script>
 </body>
 </html>
