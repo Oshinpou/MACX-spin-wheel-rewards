@@ -49,11 +49,14 @@
         #points-container {
             margin-top: 20px;
         }
-        #ad-container {
+        .section-container {
             margin-top: 20px;
             background-color: rgba(34, 34, 34, 0.9);
             padding: 20px;
             border-radius: 10px;
+        }
+        #ad-container, #double-points-container {
+            margin-top: 20px;
         }
         .logout-btn {
             position: absolute;
@@ -77,13 +80,22 @@
         <div class="wheel-container">
             <h2>Welcome, <span id="username"></span>!</h2>
             <h3>Your Points: <span id="points">0</span></h3>
+
+            <!-- Spin Wheel Section -->
             <canvas id="wheelCanvas"></canvas>
             <button onclick="spinWheel()">Spin the Wheel</button>
 
-            <!-- Ad Container to Watch Ads for Points -->
-            <div id="ad-container">
+            <!-- Watch Ad to Double Spin Points -->
+            <div id="double-points-container" class="section-container">
+                <h3>Double Your Spin Points by Watching an Ad</h3>
+                <button onclick="watchAdForDoublePoints()">Watch Ad to Double Points</button>
+                <p id="doubleAdStatus"></p>
+            </div>
+
+            <!-- Watch Ad to Earn Bonus Points -->
+            <div id="ad-container" class="section-container">
                 <h3>Watch Ad to Earn 50 Bonus Points</h3>
-                <button onclick="watchAd()">Watch Ad</button>
+                <button onclick="watchAdForBonus()">Watch Ad</button>
                 <p id="adStatus"></p>
             </div>
         </div>
@@ -142,6 +154,8 @@
         const wheelColors = ['#FFD700', '#FFA500', '#FF6347', '#40E0D0', '#8A2BE2', '#FF69B4', '#1E90FF', '#32CD32'];
         const segmentAngle = 2 * Math.PI / wheelSegments.length;
         let isSpinning = false;
+        let spinPoints = 0;
+        let adWatchedForDouble = false;
 
         // Draw Wheel
         function drawWheel() {
@@ -182,8 +196,15 @@
                     requestAnimationFrame(animateSpin);
                 } else {
                     const finalSegmentIndex = Math.floor(((randomAngle % (2 * Math.PI)) / segmentAngle)) % wheelSegments.length;
-                    const pointsWon = wheelSegments[finalSegmentIndex];
-                    updatePoints(pointsWon);
+                    spinPoints = wheelSegments[finalSegmentIndex];
+
+                    if (adWatchedForDouble) {
+                        spinPoints *= 2;
+                        adWatchedForDouble = false;
+                        document.getElementById('doubleAdStatus').innerText = '✅ Double points applied!';
+                    }
+
+                    updatePoints(spinPoints);
                     isSpinning = false;
                 }
             }
@@ -206,12 +227,29 @@
             alert(`🎉 You won ${points} points!`);
         }
 
-        // Watch Ad for Bonus Points (Ad points NOT added to user's saved data)
-        function watchAd() {
+        // Watch Ad to Earn Bonus Points (50 points)
+        function watchAdForBonus() {
             document.getElementById('adStatus').innerText = '🎥 Watching ad...';
             setTimeout(() => {
                 document.getElementById('adStatus').innerText = '✅ Ad watched! You earned 50 bonus points.';
-                alert('🎉 You earned 50 bonus points!');
+                addBonusPoints(50);
+            }, 5000);
+        }
+
+        function addBonusPoints(points) {
+            loggedInUser.points += points;
+            localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+            document.getElementById('points').innerText = loggedInUser.points;
+            alert(`🎉 You earned ${points} bonus points!`);
+        }
+
+        // Watch Ad to Double Spin Points
+        function watchAdForDoublePoints() {
+            document.getElementById('doubleAdStatus').innerText = '🎥 Watching ad to double points...';
+            setTimeout(() => {
+                adWatchedForDouble = true;
+                document.getElementById('doubleAdStatus').innerText = '✅ You can now double your next spin points!';
+                alert('🎉 Ad watched! Your next spin points will be doubled.');
             }, 5000);
         }
 
