@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login / Sign Up</title>
+    <title>Login / Sign Up - MACX Crypto Wheel</title>
     <style>
         body {
             margin: 0;
@@ -60,11 +60,16 @@
             0% { transform: translateX(0); }
             100% { transform: translateX(-100%); }
         }
+        .error-msg {
+            color: #ff4d4d;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
     <canvas id="particleCanvas"></canvas>
-    
+
+    <!-- Slider with Game Images -->
     <div class="slider-container">
         <div class="slider">
             <img src="game1.jpeg" alt="Game 1">
@@ -74,6 +79,7 @@
         </div>
     </div>
 
+    <!-- Form Container -->
     <div class="form-container">
         <h2>MACX Crypto Wheel</h2>
 
@@ -99,7 +105,7 @@
     </div>
 
     <script>
-        // Background Particle Animation
+        // Particle Background Animation
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
 
@@ -135,54 +141,70 @@
         }
         drawParticles();
 
+        // Load existing users and requests from local storage
         let users = JSON.parse(localStorage.getItem('users')) || [];
         let requests = JSON.parse(localStorage.getItem('requests')) || [];
 
+        // Sign Up Function
         function signUp() {
             const username = document.getElementById('signupUsername').value.trim();
             const password = document.getElementById('signupPassword').value.trim();
-            if (users.find(user => user.username === username)) {
-                alert('Username already exists.');
+            
+            if (!username || !password) {
+                alert('⚠️ Both fields are required!');
                 return;
             }
+
+            if (users.find(user => user.username === username)) {
+                alert('⚠️ Username already exists.');
+                return;
+            }
+            
+            // Create a new user with 0 initial points
             users.push({ username, password, points: 0 });
             localStorage.setItem('users', JSON.stringify(users));
-            alert('Sign Up Successful!');
+            alert('✅ Sign Up Successful! You can now log in.');
         }
 
-        
-  function login() {
-    const username = document.getElementById("username").value.trim();
-    if (username === "") {
-      document.getElementById("error").innerText = "⚠️ Username cannot be empty!";
-      return;
-    }
+        // Login Function
+        function login() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            
+            if (!username || !password) {
+                alert('⚠️ Both fields are required!');
+                return;
+            }
 
-    // Store username and points on successful login
-    localStorage.setItem("username", username);
-    if (!localStorage.getItem(`points_${username}`)) {
-      localStorage.setItem(`points_${username}`, "0"); // Initialize points to 0 for new user
-    }
+            const user = users.find(u => u.username === username && u.password === password);
+            if (!user) {
+                document.getElementById("error").innerText = "❌ Invalid username or password.";
+                return;
+            }
 
-    // Redirect to game.html after login
-    window.location.href = "game.html";
-  }
-        
+            // Store logged-in user details
+            localStorage.setItem('loggedInUser', JSON.stringify(user));
 
+            // Redirect to game.html after login
+            window.location.href = "game.html";
+        }
+
+        // Forgot Password Request
         function forgotPassword() {
             const username = prompt('Enter your username:');
             const email = prompt('Enter your email:');
             requests.push({ username, email, type: 'recover' });
             localStorage.setItem('requests', JSON.stringify(requests));
-            alert('Recovery request sent. Action will be taken within 24 hours.');
+            alert('📧 Recovery request sent. Action will be taken within 24 hours.');
         }
 
+        // Delete Account Request
         function deleteAccountRequest() {
             const username = prompt('Enter your username:');
             const email = prompt('Enter your email:');
             requests.push({ username, email, type: 'delete' });
             localStorage.setItem('requests', JSON.stringify(requests));
-            alert('Delete request submitted.');
+            alert('🗑️ Delete request submitted.');
         }
     </script>
 </body>
