@@ -3,17 +3,24 @@
 <head>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f9;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #141e30, #243b55);
             margin: 0;
             padding: 0;
+            overflow-x: hidden;
         }
         .container {
             text-align: center;
             padding: 20px;
+            color: #fff;
         }
         header {
-            margin-bottom: 20px;
+            padding: 20px;
+            background: #0a3d62;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+        }
+        h1, p {
+            margin: 10px 0;
         }
         .slider-container {
             width: 100%;
@@ -22,35 +29,63 @@
         }
         .slider {
             display: flex;
-            width: 600%;
-            animation: slide 10s linear infinite;
+            width: 1200%;
+            animation: slide 12s linear infinite;
         }
         .card {
-            width: 16.66%;
-            background: #4CAF50;
-            color: white;
+            width: 8.33%;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            color: #333;
             padding: 10px;
-            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+            margin: 5px;
+            box-shadow: 2px 2px 12px rgba(0,0,0,0.5);
+            border-radius: 8px;
         }
         .wheel-container {
             margin: 20px auto;
             width: 300px;
             height: 300px;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+        canvas {
+            border: 4px solid #fff;
+            border-radius: 50%;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.6);
         }
         .auth-section button {
-            padding: 10px 20px;
-            margin: 5px;
-            background-color: #008CBA;
-            color: white;
+            padding: 12px 25px;
+            margin: 10px;
+            background-color: #1abc9c;
+            color: #fff;
             border: none;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
             cursor: pointer;
         }
+        .auth-section button:hover {
+            background-color: #16a085;
+        }
+        .features {
+            margin-top: 20px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
         .features p {
-            margin-top: 10px;
+            font-size: 14px;
+            margin: 8px 0;
         }
         @keyframes slide {
-            0% { transform: translateX(0%); }
+            0% { transform: translateX(0); }
             100% { transform: translateX(-100%); }
+        }
+        .ads-container {
+            margin-top: 30px;
+            padding: 20px;
+            background: #0b3c5d;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.6);
         }
     </style>
 </head>
@@ -58,18 +93,18 @@
     <div class="container">
         <header>
             <h1>Welcome to MACX Crypto Wheel</h1>
-            <p>Spin and earn top cryptocurrencies across multiple networks.</p>
+            <p>Earn top cryptocurrencies by spinning and exploring multiple blockchain networks.</p>
         </header>
 
         <!-- Crypto Info Cards Slider -->
         <div class="slider-container">
             <div class="slider">
-                <div class="card">Earn Bitcoin on BTC Network</div>
-                <div class="card">Earn Ethereum on ETH Network</div>
-                <div class="card">Earn USDT on Tron Network</div>
-                <div class="card">Earn TON on TON Network</div>
-                <div class="card">Earn Solana on SOL Network</div>
-                <div class="card">Earn BNB on BSC Network</div>
+                <div class="card">Bitcoin on BTC Network</div>
+                <div class="card">Ethereum on ETH Network</div>
+                <div class="card">USDT on Tron Network</div>
+                <div class="card">TON on TON Network</div>
+                <div class="card">Solana on SOL Network</div>
+                <div class="card">BNB on BSC Network</div>
             </div>
         </div>
 
@@ -86,30 +121,51 @@
 
         <!-- Feature Highlights -->
         <div class="features">
-            <p>💸 Easy withdrawals</p>
-            <p>🎰 Multiple crypto options</p>
-            <p>⚡️ Instant point redemption</p>
+            <p>🎰 Spin and Earn Multiple Cryptos</p>
+            <p>💸 Fast Withdrawals</p>
+            <p>🎯 Earn Bitcoin, Ethereum & More</p>
+            <p>⚡️ Secure Transactions</p>
+            <p>🔐 Blockchain Transparency</p>
+            <p>📈 Real-time Crypto Prices</p>
+            <p>📊 Track Earnings Easily</p>
+            <p>💰 Passive Income with Referrals</p>
+            <p>🌐 Access from Anywhere</p>
+            <p>🔔 Instant Notifications</p>
+            <p>🏆 Exclusive Bonus Rewards</p>
+            <p>🔄 Daily Spin Limits</p>
+            <p>⏱️ Time-based Crypto Bonuses</p>
+            <p>🎁 Invite Friends to Earn More</p>
+            <p>🚀 High Reward Potential</p>
+        </div>
+
+        <!-- Advertisement Section -->
+        <div class="ads-container">
+            <h3>🎥 Watch Ads and Earn Extra Points!</h3>
+            <p>Increase your earnings by watching short ads and boosting your crypto balance.</p>
         </div>
     </div>
 
     <script>
-        // Wheel Rotation
+        // Wheel Drawing with Stripes
         let canvas = document.getElementById('wheel');
         let ctx = canvas.getContext('2d');
-        let angle = 0;
+        const colors = ['#f39c12', '#e74c3c', '#9b59b6', '#3498db', '#1abc9c', '#e67e22', '#2ecc71', '#e74c3c'];
 
         function drawWheel() {
-            ctx.clearRect(0, 0, 300, 300);
-            ctx.beginPath();
-            ctx.arc(150, 150, 140, 0, 2 * Math.PI);
-            ctx.fillStyle = "#FFA500";
-            ctx.fill();
-            ctx.stroke();
+            let sliceAngle = 2 * Math.PI / colors.length;
+            for (let i = 0; i < colors.length; i++) {
+                ctx.beginPath();
+                ctx.moveTo(150, 150);
+                ctx.arc(150, 150, 140, sliceAngle * i, sliceAngle * (i + 1));
+                ctx.closePath();
+                ctx.fillStyle = colors[i];
+                ctx.fill();
+                ctx.stroke();
+            }
         }
 
         function rotateWheel() {
-            angle += 0.01;
-            canvas.style.transform = `rotate(${angle}rad)`;
+            canvas.style.transform = `rotate(${Date.now() / 50}deg)`;
             requestAnimationFrame(rotateWheel);
         }
 
