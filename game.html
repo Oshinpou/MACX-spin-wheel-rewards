@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>MACX Crypto Wheel - Game</title>
+    <title>MACX Spin Wheel - Earn Cryptocurrencies</title>
     <style>
         body {
             margin: 0;
             padding: 0;
-            background: #1a1a1a;
+            background: #0d0d0d;
             font-family: Arial, sans-serif;
             color: #fff;
+            text-align: center;
         }
+
         #game-container {
             width: 100vw;
             height: 100vh;
@@ -17,50 +19,100 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            position: relative;
         }
+
+        /* Glowing Cursive Title */
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 36px;
+            color: #FFD700;
+            text-shadow: 0 0 20px #FFD700, 0 0 40px #FFA500, 0 0 60px #FF6347;
+            margin-bottom: 20px;
+        }
+
+        /* Scrolling Slider */
+        #slider-container {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            margin-bottom: 20px;
+        }
+
+        #slider {
+            display: inline-block;
+            animation: slide 15s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .slider-text {
+            display: inline-block;
+            font-size: 18px;
+            color: #FFD700;
+            margin-right: 40px;
+        }
+
+        /* Spin Wheel */
         canvas {
-            border: 5px solid #D4AF37;
+            border: 8px solid #D4AF37;
             border-radius: 50%;
         }
+
+        /* Button Styling */
         button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            background-color: #D4AF37;
+            margin-top: 15px;
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #FFD700;
             color: #000;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
+            transition: 0.3s;
         }
+
         button:hover {
             background-color: #b7952c;
         }
+
+        /* Logout Button */
         .logout-btn {
             position: absolute;
             top: 10px;
             right: 10px;
-            padding: 8px 16px;
+            padding: 10px 20px;
             background: #ff4d4d;
             color: #fff;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
         }
+
+        /* Navigation Buttons */
         .nav-container {
             margin-top: 20px;
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
         }
+
         .nav-btn {
-            padding: 8px 16px;
+            padding: 12px 20px;
+            font-size: 16px;
             background: #4CAF50;
             color: #fff;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
         }
+
         .nav-btn:hover {
             background: #45a049;
         }
     </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico">
 </head>
 <body>
 
@@ -68,12 +120,25 @@
     <button class="logout-btn" onclick="logout()">Logout</button>
 
     <div id="game-container">
-        <h2>Welcome, <span id="username"></span>!</h2>
+        <h1>MACX Spin Wheel - Earn Cryptocurrencies</h1>
+
+        <!-- Scrolling Text/Slider -->
+        <div id="slider-container">
+            <div id="slider">
+                <span class="slider-text">💸 Earn Bitcoin</span>
+                <span class="slider-text">💰 Earn USDT</span>
+                <span class="slider-text">🪙 Earn Ethereum</span>
+                <span class="slider-text">🏆 Earn MACX Tokens</span>
+                <span class="slider-text">🌟 Unlock Rewards Instantly</span>
+            </div>
+        </div>
+
+        <h3>Welcome, <span id="username"></span>!</h3>
         <h3>Your Points: <span id="points">0</span></h3>
 
         <!-- Spin Wheel Section -->
-        <canvas id="wheelCanvas" width="300" height="300"></canvas>
-        <button onclick="spinWheel()">Spin the Wheel</button>
+        <canvas id="wheelCanvas" width="320" height="320"></canvas>
+        <button onclick="spinWheel()">🎯 Spin the Wheel</button>
 
         <p id="adStatus"></p>
 
@@ -112,14 +177,14 @@
             for (let i = 0; i < wheelSegments.length; i++) {
                 wheelCtx.beginPath();
                 wheelCtx.fillStyle = wheelColors[i];
-                wheelCtx.moveTo(150, 150);
-                wheelCtx.arc(150, 150, 150, i * segmentAngle, (i + 1) * segmentAngle);
-                wheelCtx.lineTo(150, 150);
+                wheelCtx.moveTo(160, 160);
+                wheelCtx.arc(160, 160, 160, i * segmentAngle, (i + 1) * segmentAngle);
+                wheelCtx.lineTo(160, 160);
                 wheelCtx.fill();
 
                 wheelCtx.fillStyle = '#000';
-                wheelCtx.font = '14px Arial';
-                wheelCtx.fillText(wheelSegments[i] + ' pts', 120 + 70 * Math.cos(i * segmentAngle + segmentAngle / 2), 130 + 70 * Math.sin(i * segmentAngle + segmentAngle / 2));
+                wheelCtx.font = '16px Arial';
+                wheelCtx.fillText(wheelSegments[i] + ' pts', 140 + 80 * Math.cos(i * segmentAngle + segmentAngle / 2), 150 + 80 * Math.sin(i * segmentAngle + segmentAngle / 2));
             }
         }
         drawWheel();
