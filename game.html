@@ -2,9 +2,9 @@
 <html>
 <head>
     <title>MACX Spin Wheel - Earn Cryptocurrencies</title>
-   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1204724319985727"
-     crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-adsense-account" content="ca-pub-1204724319985727">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico">
     <style>
         body {
             margin: 0;
@@ -25,7 +25,6 @@
             position: relative;
         }
 
-        /* Glowing Cursive Title */
         h1 {
             font-family: 'Pacifico', cursive;
             font-size: 36px;
@@ -34,7 +33,6 @@
             margin-bottom: 20px;
         }
 
-        /* Scrolling Slider */
         #slider-container {
             width: 100%;
             overflow: hidden;
@@ -59,13 +57,11 @@
             margin-right: 40px;
         }
 
-        /* Spin Wheel */
         canvas {
             border: 8px solid #D4AF37;
             border-radius: 50%;
         }
 
-        /* Button Styling */
         button {
             margin-top: 15px;
             padding: 15px 30px;
@@ -82,7 +78,6 @@
             background-color: #b7952c;
         }
 
-        /* Logout Button */
         .logout-btn {
             position: absolute;
             top: 10px;
@@ -94,7 +89,6 @@
             border-radius: 8px;
         }
 
-        /* Navigation Buttons */
         .nav-container {
             margin-top: 20px;
             display: flex;
@@ -114,18 +108,23 @@
         .nav-btn:hover {
             background: #45a049;
         }
+
+        #ad-container {
+            display: none;
+            margin-top: 15px;
+            padding: 20px;
+            border: 2px dashed #FFD700;
+            color: #FFD700;
+        }
     </style>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico">
 </head>
 <body>
 
-    <!-- Logout Button -->
     <button class="logout-btn" onclick="logout()">Logout</button>
 
     <div id="game-container">
         <h1>MACX Spin Wheel - Earn Cryptocurrencies</h1>
 
-        <!-- Scrolling Text/Slider -->
         <div id="slider-container">
             <div id="slider">
                 <span class="slider-text">💸 Earn Bitcoin</span>
@@ -139,26 +138,12 @@
         <h3>Welcome, <span id="username"></span>!</h3>
         <h3>Your Points: <span id="points">0</span></h3>
 
-        <!-- Spin Wheel Section -->
-<div class="wheel-container">
-    <canvas id="wheelCanvas" width="320" height="320"></canvas>
-    <button onclick="spinWheel()">🎯 Spin the Wheel</button>
+        <canvas id="wheelCanvas" width="320" height="320"></canvas>
+        <button onclick="spinWheel()">🎯 Spin the Wheel</button>
+        <p id="adStatus"></p>
 
-    <p id="adStatus"></p> <!-- Ad Status Display After Spin -->
+        <div id="ad-container">🎥 Please disable your ad blocker to watch ads and earn points!</div>
 
-    <!-- Direct Link Ad Display After Spin -->
-    <script>
-        function spinWheel() {
-            // Simulate spin logic here (if you have a spin animation, keep it)
-            // After spin, open direct ad link
-            document.getElementById("adStatus").innerText = "Opening your reward...";
-            window.open("https://www.effectiveratecpm.com/hgxnyd9fa0?key=f49faf4a1cfec568bce06a3dce1fde3c", "_blank");
-        }
-    </script>
-</div>
-
-
-         <!-- Navigation Section -->
         <div class="nav-container">
             <button class="nav-btn" onclick="window.location.href='withdraw.html'">Withdraw</button>
             <button class="nav-btn" onclick="window.location.href='faq.html'">FAQ</button>
@@ -168,9 +153,7 @@
         </div>
     </div>
 
-
-        <script>
-    // Load logged-in user data
+<script>
     let loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
     if (!loggedInUser) {
         alert('❌ No user logged in. Redirecting to login page.');
@@ -180,7 +163,6 @@
         document.getElementById('points').innerText = loggedInUser.points;
     }
 
-    // Wheel Setup
     const wheelCanvas = document.getElementById('wheelCanvas');
     const wheelCtx = wheelCanvas.getContext('2d');
     const wheelSegments = [10, 20, 30, 40, 50, 100, 200, 500];
@@ -189,7 +171,6 @@
     let isSpinning = false;
     let spinPoints = 0;
 
-    // Draw Wheel
     function drawWheel() {
         for (let i = 0; i < wheelSegments.length; i++) {
             wheelCtx.beginPath();
@@ -210,7 +191,6 @@
     }
     drawWheel();
 
-    // Spin Wheel Logic
     function spinWheel() {
         if (isSpinning) return;
         isSpinning = true;
@@ -222,10 +202,8 @@
         function animateSpin(timestamp) {
             if (!startTime) startTime = timestamp;
             const elapsedTime = timestamp - startTime;
-
             const progress = Math.min(elapsedTime / spinDuration, 1);
             const currentAngle = progress * randomAngle;
-
             wheelCanvas.style.transform = `rotate(${currentAngle}rad)`;
 
             if (progress < 1) {
@@ -233,14 +211,13 @@
             } else {
                 const finalSegmentIndex = Math.floor(((randomAngle % (2 * Math.PI)) / segmentAngle)) % wheelSegments.length;
                 spinPoints = wheelSegments[finalSegmentIndex];
-                askToWatchAd();
                 isSpinning = false;
+                askToWatchAd();
             }
         }
         requestAnimationFrame(animateSpin);
     }
 
-    // Prompt to Watch Ad for Points
     function askToWatchAd() {
         const adConfirmation = confirm(`🎥 Watch an ad to collect ${spinPoints} points?`);
         if (adConfirmation) {
@@ -251,23 +228,26 @@
         }
     }
 
-// Watch Ad to Collect Points
-function watchAdToCollectPoints(points) {
-    // Show Ad Container
-    document.getElementById('container-302fcc48778dbb27b65e7e5842acaba9').style.display = "block";
-    
-    // Update Ad Status
-    document.getElementById('adStatus').innerText = '🎥 Watching ad...';
-    
-    // Hide Ad after 15 seconds
-    setTimeout(() => {
-        document.getElementById('container-302fcc48778dbb27b65e7e5842acaba9').style.display = "none";
-        document.getElementById('adStatus').innerText = '✅ Ad watched! Points added.';
-        updatePoints(points);
-    }, 15000); // Simulate 15-second ad (adjust if needed)
-}
+    function watchAdToCollectPoints(points) {
+        document.getElementById('adStatus').innerText = '🎥 Watching ad...';
 
-    // Update Points after Watching Ad
+        // Open external ad page
+        const adWin = window.open("https://www.effectiveratecpm.com/hgxnyd9fa0?key=f49faf4a1cfec568bce06a3dce1fde3c", "_blank");
+
+        // Detect popup blocker
+        if (!adWin || adWin.closed || typeof adWin.closed == 'undefined') {
+            document.getElementById('ad-container').style.display = 'block';
+            document.getElementById('adStatus').innerText = '❌ Please disable your ad blocker.';
+            return;
+        }
+
+        // Wait for 15 seconds and give reward
+        setTimeout(() => {
+            document.getElementById('adStatus').innerText = '✅ Ad watched! Points added.';
+            updatePoints(points);
+        }, 15000);
+    }
+
     function updatePoints(points) {
         loggedInUser.points += points;
         localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
@@ -283,47 +263,16 @@ function watchAdToCollectPoints(points) {
         alert(`🎉 You collected ${points} points!`);
     }
 
-    // Logout Function
     function logout() {
         localStorage.removeItem('loggedInUser');
         window.location.href = 'login.html';
     }
 
-    // Show Ad Before Spin and Unlock
-    function showAdBeforeSpin() {
-        document.getElementById('adStatus').innerHTML = "🎥 Showing ad... Please wait.";
-
-        // Show ad container
-        document.getElementById('container-302fcc48778dbb27b65e7e5842acaba9').style.display = "block";
-
-        // Hide ad after 15 seconds and unlock spin
-        setTimeout(() => {
-            document.getElementById('container-302fcc48778dbb27b65e7e5842acaba9').style.display = "none";
-            document.getElementById('adStatus').innerHTML = "✅ Ad watched! You can now spin.";
-            
-            // Mark ad as watched
-            localStorage.setItem("adWatched", "true");
-        }, 15000);
+    // Redirect if accessed from ad URL directly
+    if (document.referrer.includes('effectiveratecpm.com')) {
+        window.location.href = 'game.html';
     }
+</script>
 
-    // Unlock Spin Only After Watching Ad
-    function checkAdAndSpin() {
-        if (!localStorage.getItem("adWatched")) {
-            document.getElementById("adStatus").innerHTML = "🎥 Watch an ad to unlock your next spin!";
-            showAdBeforeSpin();
-        } else {
-            spinWheel();
-        }
-    }
-
-     function adBlockDetected() {
-    const adContainer = document.getElementById('container-302fcc48778dbb27b65e7e5842acaba9');
-    if (!adContainer || adContainer.innerHTML.length === 0) {
-        alert("⚠️ Ad Blocker Detected! Please disable your ad blocker to continue.");
-    }
-}
-
-setTimeout(adBlockDetected, 5000);           
-     </script>
 </body>
 </html>
